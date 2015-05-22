@@ -21,7 +21,7 @@ video {
 
       <!-- Steps -->
       <div class="pure-u-1-3">
-        <h2>PeerJS Video Chat</h2>
+        <h2>Client</h2>
 
         <!-- Get local audio/video stream -->
         <div id="step1">
@@ -35,7 +35,6 @@ video {
         <!-- Make calls to others -->
         <div id="step2">
           <p>Your id: <span id="my-id">...</span></p>
-          <p>Share this id with others so they can call you.</p>
         </div>
 
         <!-- Call in progress -->
@@ -47,9 +46,6 @@ video {
   </div>
 
 <script>
-var audioSelect = document.querySelector('select#audioSource');
-var videoSelect = document.querySelector('select#videoSource');
-
 // PeerJS object
 var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
 
