@@ -1,12 +1,11 @@
 <html>
 <head>
-<title>PeerJS - Video chat example</title>
+<title>Client</title>
 <link rel="stylesheet" href="style.css">
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-<script type="text/javascript" src="../../dist/peer.js"></script>
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
 <style>
 video {
-  max-width: 640px;
 }
 </style>
 </head>
@@ -18,7 +17,6 @@ video {
       <!-- Video area -->
       <div class="pure-u-2-3" id="video-container">
         <video id="their-video" autoplay></video>
-        <video id="my-video" muted="true" autoplay></video>
       </div>
 
       <!-- Steps -->
@@ -38,11 +36,6 @@ video {
         <div id="step2">
           <p>Your id: <span id="my-id">...</span></p>
           <p>Share this id with others so they can call you.</p>
-          <h3>Make a call</h3>
-          <div class="pure-form">
-            <input type="text" placeholder="Call user id..." id="callto-id">
-            <a href="#" class="pure-button pure-button-success" id="make-call">Call</a>
-          </div>
         </div>
 
         <!-- Call in progress -->
@@ -57,43 +50,6 @@ video {
 var audioSelect = document.querySelector('select#audioSource');
 var videoSelect = document.querySelector('select#videoSource');
 
-// Compatibility shim
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-function gotSources(sourceInfos) {
-  console.log(sourceInfos);
-  for (var i = 0; i !== sourceInfos.length; ++i) {
-    var sourceInfo = sourceInfos[i];
-    if (sourceInfo.kind === 'video') {
-      var constraints = 
-      {
-        audio: false,
-        video: {
-          optional: [
-            { sourceId: sourceInfo.id },
-            { minWidth: 1280 }
-          ]
-        }
-      };
-      navigator.getUserMedia(constraints, function(stream){
-        var video = document.createElement('video');
-        document.body.appendChild(video);
-        video.autoplay = true;
-        video.src = URL.createObjectURL(stream);
-        console.log('Set up ' + sourceInfo.id);
-      }, function(){ console.log('Error setting up ' + sourceInfo.id) })
-    }
-  }
-}
-
-if (typeof MediaStreamTrack === 'undefined' ||
-    typeof MediaStreamTrack.getSources === 'undefined') {
-  alert('This browser does not support MediaStreamTrack.\n\nTry Chrome.');
-} else {
-  console.log('Getting sources.');
-  MediaStreamTrack.getSources(gotSources);
-}
-
 // PeerJS object
 var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
 
@@ -104,7 +60,8 @@ peer.on('open', function(){
 // Receiving a call
 peer.on('call', function(call){
   // Answer the call automatically (instead of prompting user) for demo purposes
-  call.answer(window.localStream);
+  // call.answer(window.localStream);
+  call.answer();
   step3(call);
 });
 peer.on('error', function(err){
@@ -115,13 +72,6 @@ peer.on('error', function(err){
 
 // Click handlers setup
 $(function(){
-  $('#make-call').click(function(){
-    // Initiate a call!
-    var call = peer.call($('#callto-id').val(), window.localStream);
-
-    step3(call);
-  });
-
   $('#end-call').click(function(){
     window.existingCall.close();
     step2();
@@ -138,23 +88,7 @@ $(function(){
 });
 
 function step1 () {
-  // Get audio/video stream
-  var constraints = 
-  {
-    audio: false,
-    video: {
-      optional: [
-        {minWidth: 1280}
-      ]
-    }
-  };
-  navigator.getUserMedia(constraints, function(stream){
-    // Set your video displays
-    $('#my-video').prop('src', URL.createObjectURL(stream));
-
-    window.localStream = stream;
-    step2();
-  }, function(){ $('#step1-error').show(); });
+  step2();
 }
 
 function step2 () {
