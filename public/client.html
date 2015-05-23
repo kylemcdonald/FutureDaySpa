@@ -24,7 +24,7 @@ body {
 #debug {
   padding: 25px;
   position: fixed;
-  right: 25px;
+  left: 25px;
   bottom: 25px;
   background-color: white;
 }
@@ -48,13 +48,12 @@ body {
 
         <!-- Call in progress -->
         <div id="step3">
-          <p>Currently in call with <span id="their-id">...</span></p>
+          <p>Their id: <span id="their-id">...</span></p>
           <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
         </div>
 
         <!-- extra -->
         <div>
-          <p><a href="#" class="pure-button" id="enter-fullscreen">Enter fullscreen</a></p>
           <p><a href="#" class="pure-button" id="refresh">Refresh</a></p>
           <p>Resolution: <span id="resolution">...</span></p>
         </div>
@@ -110,11 +109,6 @@ $(function(){
     step2();
   });
 
-  $('#enter-fullscreen').click(function() {
-    document.documentElement.webkitRequestFullscreen();
-    $('#enter-fullscreen').hide();
-  })
-
   $('#refresh').click(function() {
     hangUp();
     location.reload();
@@ -158,7 +152,6 @@ function step3 (call) {
   window.existingCall = call;
   $('#their-id').text(call.peer);
   call.on('close', step2);
-  $('#step2').hide();
   $('#step3').show();
 }
 </script>
