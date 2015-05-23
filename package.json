@@ -16,5 +16,8 @@
     "url": "https://github.com/kylemcdonald/FutureDaySpa/issues"
   },
   "homepage": "https://github.com/kylemcdonald/FutureDaySpa",
-  "dependencies": {}
+  "dependencies": {
+    "socket.io": "^1.3.5",
+    "express": "^4.12.4"
+  }
 }
