@@ -166,6 +166,10 @@ socket.on('news', function (data) {
 socket.on('voicemail', function (data) {
   console.log('Got voicemail:');
   console.log(data);
+  if(window.existingCall) {
+    console.log('But already on the line, ignoring.');
+    return;
+  }
   if(data.cameraId == cameraId) {
     makeCall(data.clientId);
   }

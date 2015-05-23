@@ -54,6 +54,13 @@ var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
 
 peer.on('open', function(){
   $('#my-id').text(peer.id);
+
+  var query =
+    '?clientId=' + peer.id +
+    '&cameraId=' + Arg('cameraId');    
+  $.get('voicemail' + query, function( data ) {
+    console.log('Left a voicemail message ' + query);
+  });
 });
 
 // Receiving a call
