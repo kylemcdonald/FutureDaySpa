@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
 
 app.post('/screenshot', function(req, res) {
 	var cameraId = req.query.cameraId;
-	var dir = 'data/screenshots/' + cameraId + '/';
+	var dir = 'public/screenshots/' + cameraId + '/';
 	mkdirp(dir, function (err) {
 	    if (err) {
 	    	console.error(err);

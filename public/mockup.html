@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>Future Day Spa</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<style>
+@font-face {
+  font-family: 'Apercu';
+  font-weight: normal;
+  src: url('assets/apercu_regular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Apercu';
+  font-weight: bold;
+  src: url('assets/apercu_bold.otf') format('opentype');
+}
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 1280px;
+  height: 720px;
+}
+body {
+  background-color: black;
+  font-family: 'Apercu';
+  letter-spacing: .200em;
+  font-size: 13px;
+  color: white;
+}
+#background {
+  width: 1280px;
+}
+#background * {
+  width: 100%;
+}
+#graph {
+  position: absolute;
+  left: 24px;
+  top: 520px;
+}
+#crosshairs {
+  position: absolute;
+  left: 652px;
+  top: 325px;
+}
+.text {
+  transform-origin: left;
+  transform:scale(.8,1);  
+}
+#crosshairs-number {
+  position: absolute;
+  left: 693px;
+  top: 311px;
+}
+#crosshairs-text {
+  position: absolute;
+  left: 753px;
+  top: 362px;
+}
+#debug-info {
+  position: absolute;
+  left: 1071px;
+  top: 15px;
+  width: 170px;
+  height: 120px;
+  font-size: 11.65px;
+  line-height: 20px;
+  padding: 0;
+  overflow: hidden;
+  text-align: right;
+  background-color: #E1C0DB;
+}
+#debug-info * {
+  margin: 14px;
+}
+</style>
+</head>
+
+<body>
+<img id="background" src="assets/background.jpg"/>
+<img id="graph" src="assets/graph-placeholder.svg"/>
+<img id="crosshairs" src="assets/crosshairs.svg"/>
+<div id="crosshairs-number" class="text">09%</div>
+<div id="crosshairs-text" class="text">device_QUAL_Life</div>
+<div id="debug-info">
+  <p>
+  body mass index/.. health index /.. Qualcomm pulse oximeter../ data <b>air_interface)type</b> 
+  body mass index/.. health index /.. Qualcomm pulse oximeter../ data <b>air_interface)type</b>
+</p>
+</div>
+</body>
+</html>
