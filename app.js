@@ -1,4 +1,5 @@
 var mkdirp = require('mkdirp');
+var webshot = require('webshot');
 var bodyParser = require('body-parser')
 var fs = require('fs');
 var express = require('express');
@@ -37,5 +38,37 @@ app.post('/screenshot', function(req, res) {
 			if(err) console.log(err);
 		});
 	});
-	res.sendStatus(200); // respond immediately
+	res.sendStatus(200);
+})
+
+app.get('/print', function(req, res) {
+	var cameraId = req.query.cameraId;
+	var screenshot = req.query.screenshot; // should pull this from the second-most recent screenshot
+	var dir = 'public/prints/' + cameraId + '/';
+	var filename = dir + (new Date()) + '.png';
+	mkdirp(dir, function (err) {
+	    if (err) {
+	    	console.error(err);
+	    	return;
+	    }
+		var zoomFactor = 2;
+		var options = 
+		{
+			zoomFactor: zoomFactor,
+			windowSize: { 
+				width: 1280 * zoomFactor,
+				height: 720 * zoomFactor
+			}
+		};
+		var url = 'http://localhost:8000/mockup.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
+		webshot(url, filename, options, function (err) {
+		    if (err) {
+		    	console.error(err);
+		    	return;
+		    }
+		    // now position `filename` on the page and print
+		    // with the `printer` module
+		})
+	})
+	res.sendStatus(200);
 })

@@ -1,4 +1,5 @@
 .*
 !.gitignore
-data/
+screenshots/
+prints/
 node_modules/

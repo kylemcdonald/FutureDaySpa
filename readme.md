@@ -6,14 +6,19 @@
 2. Install [git](http://git-scm.com/download/mac)
 3. Install [Node.js](http://nodejs.org/)
 
+Git can also be installed with HomeBrew, but Node.js should be installed the usual way.
+
+Then open Terminal and enter:
+
 ```
 git clone git@github.com:kylemcdonald/FutureDaySpa.git
 cd FutureDaySpa
 npm install
-node app.js
+sudo npm install -g forever
+forever app.js
 ```
 
-On the main computer (`futuredayspa.local`), open up two Chrome tabs with the following URLs:
+On the main computer (presumably `futuredayspa.local`), open up two Chrome tabs with the following URLs:
 
 ```
 http://localhost:8000/server.html?cameraId=1
@@ -22,7 +27,7 @@ http://localhost:8000/server.html?cameraId=2
 
 The numbers `1` and `2` may be different on a different machine. They could even change if you switch USB ports and restart Chrome. But if you keep things plugged in the same way they should be the same even if you restart Chrome or the computer.
 
-Make sure to click "Allow" for the camera permissions. Alternatively, you can open the tabs by running this command from the Terminal on OSX:
+Make sure to click "Allow" for the camera permissions. Alternatively, you can open Chrome by running this command from the Terminal on OSX:
 
 ```
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://localhost:8000/server.html?cameraId=0" --use-fake-ui-for-media-stream
@@ -35,6 +40,22 @@ http://futuredayspa.local:8000/?cameraId=1
 http://futuredayspa.local:8000/?cameraId=2
 ```
 
+Where `cameraId` corresponds to which camera the tablet is beneath.
+
 If `futuredayspa.local` does not resolve, you may need to assign a static IP to the main computer and use the IP address instead.
 
 The tablets will then show the video stream after a delay of, at most, a few seconds. Swipe up in the middle of the screen to make the address bar disappear.
+
+As a final step in configuration, you'll need to map the serial numbers of the pulse oximeters to the corresponding `cameraId` they'll be beneath. If you take a reading with the pulse oximeter (can take up to 30 seconds) then go to [this endpoint](http://qualcomm-lucymcrae.herokuapp.com/get/data) the most recent data will have the serial of that device. Modify [these lines](https://github.com/kylemcdonald/FutureDaySpa/blob/master/public/config.js#L3-L4) to match the serial to the `cameraId`.
+
+## Tablets
+
+The Xperia tablets have about 3 hours battery life when running the live video.
+
+They should be configured to stay on for 30 minutes intervals:
+
+1. Swipe down at the top right
+2. "Shortcut to Settings"
+3. "Display" under the "DEVICE" heading
+4. "Sleep"
+5. Select "30 minutes"

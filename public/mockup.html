@@ -1,7 +1,10 @@
 <html>
 <head>
 <title>Future Day Spa</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="lib/arg-1.3.1.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="config.js"></script>
 <style>
 @font-face {
   font-family: 'Apercu';
@@ -31,6 +34,11 @@ body {
 }
 #background * {
   width: 100%;
+}
+#vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #graph {
   position: absolute;
@@ -73,10 +81,18 @@ body {
   margin: 14px;
 }
 </style>
+<script>
+$(function() {
+  var screenshot = Arg('screenshot');
+  if(screenshot) {
+    $('#background').prop('src', 'screenshots/'+cameraId+'/'+screenshot);
+  }
+})
+</script>
 </head>
-
 <body>
 <img id="background" src="assets/background.jpg"/>
+<img id="vignette" src="assets/vignette.png"/>
 <img id="graph" src="assets/graph-placeholder.svg"/>
 <img id="crosshairs" src="assets/crosshairs.svg"/>
 <div id="crosshairs-number" class="text">09%</div>
