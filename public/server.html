@@ -135,6 +135,14 @@ $(function(){
   step1();
 });
 
+function closeExisting() {
+  // Hang up on an existing call if present
+  if (window.existingCall) {
+    window.existingCall.close();
+    window.existingCall = null;
+  }
+}
+
 function step1 () {
   MediaStreamTrack.getSources(gotSources);
 }
@@ -142,13 +150,11 @@ function step1 () {
 function step2 () {
   $('#step1, #step3').hide();
   $('#step2').show();
+  closeExisting();
 }
 
 function step3 (call) {
-  // Hang up on an existing call if present
-  if (window.existingCall) {
-    window.existingCall.close();
-  }
+  closeExisting();
 
   // UI stuff
   window.existingCall = call;
