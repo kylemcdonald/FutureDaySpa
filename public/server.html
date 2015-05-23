@@ -67,7 +67,8 @@ function gotSources(sourceInfos) {
           video: {
             optional: [
               { sourceId: sourceInfo.id },
-              { minWidth: 1280 }
+              { minWidth: 1280 },
+              { maxFrameRate: 10 }
             ]
           }
         };
