@@ -7,37 +7,46 @@
 <script src="lib/arg-1.3.1.min.js"></script>
 <script src="lib/canvas-to-blob.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="config.js"></script>
 <style>
-video {
+body, html {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  height: 75%;
-  max-height: 480px;
-  background-color: #eee;
 }
-
-#video-container {
-  padding: 25px;
-  text-align: center;
+body {
+  background-color: black;
 }
-
-*, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+#debug, div, h1, h2, h3, p {
+  margin: .2em;
+  padding: 0;
+}
+#my-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+#debug {
+  border-radius: 4px;
+  padding: 1em;
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+  background-color: white;
 }
 </style>
 </head>
 
 <body>
 
-  <div class="pure-g">
+  <video id="my-video" muted="true" autoplay></video>
 
-      <!-- Video area -->
-      <div class="pure-u-2-3" id="video-container">
-        <video id="my-video" muted="true" autoplay></video>
-      </div>
+  <div id="debug">
 
       <!-- Steps -->
-      <div class="pure-u-1-3">
-        <h2>Server</h2>
+      <div>
+        <h2>Server <span id="camera-id">...</span></h2>
 
         <!-- Get local audio/video stream -->
         <div id="step1">
@@ -63,14 +72,14 @@ video {
           <p>Their id: <span id="their-id">...</span></p>
           <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
         </div>
+
+        <div>
+          <p>Latest data: <span id="latest-data">...</span></p>
+        </div>
       </div>
   </div>
 
 <script>
-var peerjsApiKey = '8qwdecpywmkuik9';
-var screenshotTimeout = 2 * 60 * 1000; // every 2 minutes
-var cameraId = Arg('cameraId') || 0;
-
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 function saveScreenshot() {
@@ -124,8 +133,8 @@ function gotSources(sourceInfos) {
         navigator.getUserMedia(constraints, function(stream){
           // Set your video displays
           $('#my-video').prop('src', URL.createObjectURL(stream));
-          setInterval(saveScreenshot, screenshotTimeout); // loop
-          setTimeout(saveScreenshot, 5 * 1000); // one-off
+          setInterval(saveScreenshot, config.screenshotTimeout); // loop
+          setTimeout(saveScreenshot, config.screenshotInitial); // one-off
           window.localStream = stream;
           step2();
         }, function(){ $('#step1-error').show(); });
@@ -138,7 +147,7 @@ function gotSources(sourceInfos) {
 }
 
 // PeerJS object
-var peer = new Peer({ key: peerjsApiKey, debug: 3 });
+var peer = new Peer({ key: config.peerjsApiKey, debug: 3 });
 
 peer.on('open', function(){
   $('#my-id').text(peer.id);
@@ -169,6 +178,8 @@ function makeCall(clientId) {
 
 // Click handlers setup
 $(function(){
+  $('#camera-id').text(cameraId);
+
   $('#make-call').click(function(){
     // Initiate a call!
     makeCall($('#callto-id').val());
@@ -218,16 +229,33 @@ function step3 (call) {
   $('#step3').show();
 }
 
-var socket = io.connect(); // 'http://localhost:8000/'
-socket.on('news', function (data) {
+var voicemailSocket = io.connect(); // 'http://localhost:8000/'
+voicemailSocket.on('status', function (data) {
   console.log(data);
-  socket.emit('my other event', { my: 'data' });
+  voicemailSocket.emit('status', { client: location.href });
 });
-socket.on('voicemail', function (data) {
+voicemailSocket.on('voicemail', function (data) {
   console.log('Got voicemail:');
   console.log(data);
   if(data.cameraId == cameraId) {
     makeCall(data.clientId);
+  }
+});
+
+var dataSocket = io.connect('http://qualcomm-lucymcrae.herokuapp.com/');
+dataSocket.on('status', function (data) {
+  console.log(data);
+  dataSocket.emit('status', { client: location.href });
+});
+dataSocket.on('update', function (data) {
+  console.log('Got heart rate update');
+  console.log(data);
+  $('#latest-data').text(data);
+  if(data.serial == curSerial) {
+    console.log('Updating records from database');
+    $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+curSerial, function (data) {
+      console.log(data);
+    })
   }
 });
 </script>

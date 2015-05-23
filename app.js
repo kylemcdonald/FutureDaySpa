@@ -12,8 +12,8 @@ app.use(bodyParser.raw({ type: 'image/jpeg', limit: '10mb'}));
 app.use(express.static(__dirname + '/public'));
 
 io.on('connection', function (socket) {
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
+	socket.emit('status', { server: __filename });
+	socket.on('status', function (data) {
 		console.log(data);
 	});
 
