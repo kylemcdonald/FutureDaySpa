@@ -33,7 +33,6 @@ video {
       <!-- Video area -->
       <div class="pure-u-2-3" id="video-container">
         <video id="my-video" muted="true" autoplay></video>
-        <canvas id="screenshot"></canvas>
       </div>
 
       <!-- Steps -->
@@ -68,14 +67,15 @@ video {
   </div>
 
 <script>
+var peerjsApiKey = '8qwdecpywmkuik9';
+var screenshotTimeout = 2 * 60 * 1000; // every 2 minutes
 var cameraId = Arg('cameraId') || 0;
 
-// Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-function loadScreenshot() {
+function saveScreenshot() {
   var v = document.getElementById('my-video');
-  var canvas = document.getElementById('screenshot');
+  var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
 
   var cw = v.videoWidth;
@@ -83,15 +83,30 @@ function loadScreenshot() {
   canvas.width = cw;
   canvas.height = ch;
 
-  draw(this,context,cw,ch);
+  context.drawImage(v, 0, 0, cw, ch);
+
+  canvas.toBlob(
+        function (blob) {
+            var req = new XMLHttpRequest();
+            req.open('POST', 'screenshot?cameraId='+cameraId, true);
+            req.onload = function (event) {
+              console.log('Uploaded blob successfully:');
+              console.log(event);
+            };
+            console.log('Uploading blob:');
+            console.log(blob);
+            req.send(blob);
+        },
+        'image/jpeg'
+  );
 }
 
 function gotSources(sourceInfos) {
   var videoCount = 0;
   for (var i = 0; i !== sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
-    console.log(sourceInfo.id + ' / ' + sourceInfo.label + ' / ' + sourceInfo.kind);
     if (sourceInfo.kind === 'video') {
+      console.log(sourceInfo.id + ' / ' + sourceInfo.label + ' / ' + sourceInfo.kind);
       if (videoCount == cameraId) {
         var constraints = 
         {
@@ -108,7 +123,8 @@ function gotSources(sourceInfos) {
         navigator.getUserMedia(constraints, function(stream){
           // Set your video displays
           $('#my-video').prop('src', URL.createObjectURL(stream));
-
+          setInterval(saveScreenshot, screenshotTimeout); // loop
+          setTimeout(saveScreenshot, 5 * 1000); // one-off
           window.localStream = stream;
           step2();
         }, function(){ $('#step1-error').show(); });
@@ -121,7 +137,7 @@ function gotSources(sourceInfos) {
 }
 
 // PeerJS object
-var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
+var peer = new Peer({ key: peerjsApiKey, debug: 3 });
 
 peer.on('open', function(){
   $('#my-id').text(peer.id);
@@ -201,7 +217,7 @@ function step3 (call) {
   $('#step3').show();
 }
 
-var socket = io.connect('http://localhost:8000/');
+var socket = io.connect(); // 'http://localhost:8000/'
 socket.on('news', function (data) {
   console.log(data);
   socket.emit('my other event', { my: 'data' });

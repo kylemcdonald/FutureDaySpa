@@ -61,6 +61,8 @@ body {
   </div>
 
 <script>
+var peerjsApiKey = '8qwdecpywmkuik9';
+var voicemailTimeout = 1 * 1000; 
 var cameraId = Arg('cameraId') || 0;
 
 function leaveVoicemail() {
@@ -73,11 +75,11 @@ function leaveVoicemail() {
   $.get('voicemail' + query, function( data ) {
     console.log('Left a voicemail message ' + query);
   });
-  setTimeout(leaveVoicemail, 1000);
+  setTimeout(leaveVoicemail, voicemailTimeout);
 }
 
 // PeerJS object
-var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
+var peer = new Peer({ key: peerjsApiKey });
 
 peer.on('open', function(){
   $('#my-id').text(peer.id);
