@@ -106,6 +106,7 @@ function gotSources(sourceInfos) {
   for (var i = 0; i !== sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
     if (sourceInfo.kind === 'video') {
+      console.log(sourceInfo);
       console.log(sourceInfo.id + ' / ' + sourceInfo.label + ' / ' + sourceInfo.kind);
       if (videoCount == cameraId) {
         var constraints = 
