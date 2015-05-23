@@ -242,6 +242,7 @@ voicemailSocket.on('voicemail', function (data) {
   }
 });
 
+var hrData;
 var dataSocket = io.connect('http://qualcomm-lucymcrae.herokuapp.com/');
 dataSocket.on('status', function (data) {
   console.log(data);
@@ -250,11 +251,11 @@ dataSocket.on('status', function (data) {
 dataSocket.on('update', function (data) {
   console.log('Got heart rate update');
   console.log(data);
-  $('#latest-data').text(data);
+  $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
   if(data.serial == curSerial) {
     console.log('Updating records from database');
     $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+curSerial, function (data) {
-      console.log(data);
+      hrData = data;
     })
   }
 });
