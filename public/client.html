@@ -63,24 +63,24 @@ body {
 <script>
 var cameraId = Arg('cameraId') || 0;
 
+function leaveVoicemail() {
+  if(window.existingCall) {
+    return;
+  }
+  var query =
+    '?clientId=' + peer.id +
+    '&cameraId=' + Arg('cameraId');    
+  $.get('voicemail' + query, function( data ) {
+    console.log('Left a voicemail message ' + query);
+  });
+  setTimeout(leaveVoicemail, 1000);
+}
+
 // PeerJS object
 var peer = new Peer({ key: '8qwdecpywmkuik9', debug: 3});
 
 peer.on('open', function(){
   $('#my-id').text(peer.id);
-
-  function leaveVoicemail() {
-    if(window.existingCall) {
-      return;
-    }
-    var query =
-      '?clientId=' + peer.id +
-      '&cameraId=' + Arg('cameraId');    
-    $.get('voicemail' + query, function( data ) {
-      console.log('Left a voicemail message ' + query);
-    });
-    setTimeout(leaveVoicemail, 1000);
-  }
   leaveVoicemail();
 });
 
@@ -92,7 +92,7 @@ peer.on('call', function(call){
   step3(call);
 });
 peer.on('error', function(err){
-  alert(err.message);
+  // alert(err.message);
   // Return to step 2 if error occurs
   step2();
 });
@@ -105,7 +105,7 @@ function updateResolution() {
 // Click handlers setup
 $(function(){
   $('#end-call').click(function(){
-    window.existingCall.close();
+    hangUp();
     step2();
   });
 
@@ -128,6 +128,7 @@ function hangUp() {
   // Hang up on an existing call if present
   if (window.existingCall) {
     window.existingCall.close();
+    window.existingCall = null;
   }
 }
 
@@ -138,6 +139,8 @@ function step1 () {
 function step2 () {
   $('#step3').hide();
   $('#step2').show();
+  hangUp();
+  leaveVoicemail();
 }
 
 function step3 (call) {

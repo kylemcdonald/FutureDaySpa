@@ -5,6 +5,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
 <script src="lib/arg-1.3.1.min.js"></script>
+<script src="lib/canvas-to-blob.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
 video {
@@ -32,6 +33,7 @@ video {
       <!-- Video area -->
       <div class="pure-u-2-3" id="video-container">
         <video id="my-video" muted="true" autoplay></video>
+        <canvas id="screenshot"></canvas>
       </div>
 
       <!-- Steps -->
@@ -59,7 +61,7 @@ video {
 
         <!-- Call in progress -->
         <div id="step3">
-          <p>Currently in call with <span id="their-id">...</span></p>
+          <p>Their id: <span id="their-id">...</span></p>
           <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
         </div>
       </div>
@@ -70,6 +72,19 @@ var cameraId = Arg('cameraId') || 0;
 
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+function loadScreenshot() {
+  var v = document.getElementById('my-video');
+  var canvas = document.getElementById('screenshot');
+  var context = canvas.getContext('2d');
+
+  var cw = v.videoWidth;
+  var ch = v.videoHeight;
+  canvas.width = cw;
+  canvas.height = ch;
+
+  draw(this,context,cw,ch);
+}
 
 function gotSources(sourceInfos) {
   var videoCount = 0;
@@ -157,7 +172,7 @@ $(function(){
   step1();
 });
 
-function closeExisting() {
+function hangUp() {
   // Hang up on an existing call if present
   if (window.existingCall) {
     window.existingCall.close();
@@ -172,11 +187,11 @@ function step1 () {
 function step2 () {
   $('#step1, #step3').hide();
   $('#step2').show();
-  closeExisting();
+  hangUp();
 }
 
 function step3 (call) {
-  closeExisting();
+  hangUp();
 
   // UI stuff
   window.existingCall = call;
