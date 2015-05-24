@@ -78,7 +78,24 @@ app.get('/screenshot/recent', function(req, res) {
 	res.sendfile(path);
 })
 
+function sh(cmd) {
+	var cmdStr = cmd.join(' ');
+	console.log(cmdStr);
+	exec(cmdStr, function (error, stdout, stderr) {
+		// console.log(stdout);
+		// console.log(stderr);
+		if (error !== null) {
+			console.log('exec error: ' + error);
+		}
+	})
+}
+
+function quote(str) {
+	return '"' + str + '"';
+}
+
 app.get('/print', function(req, res) {
+sh(['whoami']);
 	console.log('/print');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
@@ -91,48 +108,69 @@ app.get('/print', function(req, res) {
 	    	console.error(err);
 	    	return;
 	    }
-		var zoomFactor = 2;
+    	// get the right imageSize and zoomFactor
+	    var baseSize = [1280., 720.];
+	    var imageSize = [
+	    	config.imageDimensions[0] * config.printPpi,
+	    	config.imageDimensions[1] * config.printPpi
+	    ];
+		var zoomFactor = imageSize[0] / baseSize[0];
 		var options = 
 		{
 			// timeout: 10000,
 			// takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,
-			windowSize: { 
-				width: 1280 * zoomFactor,
-				height: 720 * zoomFactor
+			windowSize: {
+				width: Math.round(baseSize[0] * zoomFactor),
+				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
 		var url = 'http://localhost:8000/mockup.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
 		console.log('webshot');
 		console.log('\tfrom: ' + url);
 		console.log('\tto: ' + filename);
+		console.log(options);
 		webshot(url, filename, options, function (err) {
 		    if (err) {
 		    	console.error(err);
 		    	// could try hitting /print again here
 		    	return;
 		    }
-		    console.log('saved');
-		    // now position `filename` on the page
+		    console.log('saved webshot');
+
+    		// then place on page with image magick
+		    var mediaSize = [
+		    	Math.round(config.mediaDimensions[0] * config.printPpi),
+		    	Math.round(config.mediaDimensions[1] * config.printPpi)
+		    ];
+		    var imageOffset = [
+		    	Math.round(config.imageOffset[0] * config.printPpi),
+		    	Math.round(config.imageOffset[1] * config.printPpi)
+	    	];
+	    	sh([
+	    		'mogrify',
+	    		'-background none',
+	    		'-extent ' + mediaSize[0] + 'x' + mediaSize[1],
+	    		'-page +' + imageOffset[0] + '+' + imageOffset[1],
+	    		'-flatten',
+	    		quote(filename)
+    		]);
 
 		    // print with lpr
-		    var cmd = [
-		    	'lpr',
-		    	'-T "' + cameraId + ': ' + screenshot + '"',
+		    sh([
+		    	'lp',
+		    	// '-T "' + cameraId + ': ' + screenshot + '"',
 		    	'-o landscape',
-		    	'-o fit-to-page',
-		    	'-o page-top=0',
-		    	'-o page-right=0',
-		    	'-o page-bottom=0',
-		    	'-o page-left=0',
-		    	'-o media=Custom.' + config.mediaDimensions,
-		    	'"' + filename + '"'
-	    	];
-		    exec(cmd.join(' '), function (error, stdout, stderr) {
-		    	if (error !== null) {
-		    		console.log('exec error: ' + error);
-		    	}
-		    })
+		    	// '-o fit-to-page',
+		    	// '-o page-top=0',
+		    	// '-o page-right=0',
+		    	// '-o page-bottom=0',
+		    	// '-o page-left=0',
+		    	'-o media=Custom.' + 
+		    		2*config.mediaDimensions[0] + 'x' +
+		    		2*config.mediaDimensions[1] + 'in',
+		    	quote(filename)
+	    	]);
 		})
 	})
 	res.sendStatus(200);
