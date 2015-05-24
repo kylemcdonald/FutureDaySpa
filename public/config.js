@@ -9,7 +9,11 @@ var config = {
 	voicemailTimeout: (1 * 1000), // request connection every 1s
 
 	crosshairs: {
-		cycle: {min: 500, max: 4000}
+		cycle: { min: 500, max: 4000 },
+		range: {
+			left: { min: 430, max: 820 },
+			top: { min: 200, max: 430 }
+		}
 	}
 };
 config.cameraId = Arg('cameraId') || 0;
