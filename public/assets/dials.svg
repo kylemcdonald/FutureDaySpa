@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="198.026px" height="113.25px" viewBox="0 0 198.026 113.25" enable-background="new 0 0 198.026 113.25"
+	 xml:space="preserve">
+<g>
+	<text transform="matrix(1 0 0 1 149.8085 94.2389)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549" letter-spacing="1">%</tspan><tspan x="11.445" y="0" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">Overall</tspan></text>
+</g>
+<circle opacity="0.54" fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" cx="41.055" cy="41.055" r="39.598"/>
+<path fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" d="M64.955,50.612"/>
+<path opacity="0.76" fill="#E1C0DC" d="M68.32,51.66l-8.625-4.402c-0.814-0.415-1.186-1.329-0.986-2.221
+	c0.287-1.281,0.438-2.614,0.438-3.982c0-11.311-10.351-20.204-22.098-17.723c-6.821,1.44-12.327,6.947-13.768,13.768
+	c-2.481,11.746,6.413,22.098,17.723,22.098v14.341c-17.94,0-32.483-14.543-32.483-32.483c0-18.27,15.083-33.017,33.476-32.468
+	c17.308,0.516,32.008,15.225,31.97,32.541c-0.009,4.236,0.676,13.774-3.342,11.441L68.32,51.66z"/>
+<circle opacity="0.54" fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" cx="143.561" cy="41.055" r="39.598"/>
+<g>
+	<text transform="matrix(1 0 0 1 46.4812 94.4039)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549" letter-spacing="1">%</tspan><tspan x="11.212" y="0" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">SPO</tspan><tspan x="32.715" y="0" fill="#FFFFFF" font-family="'MyriadPro-Regular'" font-size="11.6549">₂</tspan></text>
+</g>
+<line fill="none" stroke="#FFFFFF" stroke-width="0.8861" stroke-miterlimit="10" x1="41.055" y1="113.25" x2="41.055" y2="59.197"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="74.0069" y1="41.0549" x2="8.7525" y2="41.0549">
+	<stop  offset="0" style="stop-color:#FFFFFF"/>
+	<stop  offset="1" style="stop-color:#000000"/>
+</linearGradient>
+<path opacity="0.42" fill="url(#SVGID_1_)" d="M68.32,51.66l-8.625-4.402c-0.814-0.415-1.186-1.329-0.986-2.221
+	c0.287-1.281,0.438-2.614,0.438-3.982c0-11.311-10.351-20.204-22.098-17.723c-6.821,1.44-12.327,6.947-13.768,13.768
+	c-2.481,11.746,6.413,22.098,17.723,22.098v14.341c-17.94,0-32.483-14.543-32.483-32.483c0-18.27,15.083-33.017,33.476-32.468
+	c17.308,0.516,32.008,15.225,31.97,32.541c-0.009,4.236,0.676,13.774-3.342,11.441L68.32,51.66z"/>
+<circle fill="#E3BFCF" cx="66.173" cy="47.938" r="7.879"/>
+<path opacity="0.76" fill="#27AAE1" d="M142.85,73.523c-17.308-0.516-32.008-15.225-31.97-32.541
+	c0.009-4.236-0.676-13.774,3.342-11.441l2.306,0.909l8.625,4.402c0.814,0.415,1.186,1.329,0.986,2.221
+	c-0.287,1.281-0.438,2.614-0.438,3.982c0,9.897,7.925,17.943,17.776,18.138"/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="438.746" y1="271.5565" x2="434.4387" y2="271.5565" gradientTransform="matrix(-1 0 0 -1 582.2225 330.544)">
+	<stop  offset="0" style="stop-color:#FFFFFF"/>
+	<stop  offset="1" style="stop-color:#000000"/>
+</linearGradient>
+<path opacity="0.42" fill="url(#SVGID_2_)" d="M143.476,59.193c1.407,0.028,2.854-0.104,4.323-0.415"/>
+<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="471.3811" y1="279.193" x2="438.8607" y2="279.193" gradientTransform="matrix(-1 0 0 -1 582.2225 330.544)">
+	<stop  offset="0" style="stop-color:#FFFFFF"/>
+	<stop  offset="1" style="stop-color:#000000"/>
+</linearGradient>
+<path opacity="0.42" fill="url(#SVGID_3_)" d="M142.85,73.523c-17.308-0.516-32.008-15.225-31.97-32.541
+	c0.009-4.236-0.676-13.774,3.342-11.441l2.306,0.909l8.625,4.402c0.814,0.415,1.186,1.329,0.986,2.221
+	c-0.287,1.281-0.438,2.614-0.438,3.982c0,9.897,7.925,17.943,17.775,18.138"/>
+<circle fill="#79D0E5" cx="118.675" cy="34.172" r="7.879"/>
+<line fill="none" stroke="#FFFFFF" stroke-width="0.8861" stroke-miterlimit="10" x1="143.561" y1="113.25" x2="143.561" y2="59.197"/>
+</svg>
