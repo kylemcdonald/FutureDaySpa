@@ -153,6 +153,9 @@ body {
 }
 #debug-title {
   margin-bottom: .5em;
+  height: 1.2em;
+  overflow: hidden;
+  text-transform: capitalize;
 }
 #debug-body {
   opacity: .35;
@@ -206,12 +209,22 @@ function cycleCrosshairsLabel() {
   setTimeout(cycleCrosshairsLabel, duration);
 }
 
+function cycleDebugTitle() {
+  var title = $('#debug-title');
+  title.text(generatePhrase());
+  var duration = _.random(
+    config.title.cycle.min,
+    config.title.cycle.max);
+  setTimeout(cycleDebugTitle, duration);  
+}
+
 $(function() {
   var screenshot = Arg('screenshot');
   if(screenshot) {
     $('#background').prop('src', 'screenshots/'+config.cameraId+'/'+screenshot);
   }
   cycleCrosshairsLabel();
+  cycleDebugTitle();
 })
 $(window).keypress(function(event){
     if(String.fromCharCode(event.which) == '.') {

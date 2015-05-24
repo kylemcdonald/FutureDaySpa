@@ -14,6 +14,12 @@ var config = {
 			left: { min: 430, max: 820 },
 			top: { min: 200, max: 430 }
 		}
+	},
+	title: {
+		cycle: { min: 500, max: 4000 },
+	},
+	debug: {
+		cycle: { min: 400, max: 800 },
 	}
 };
 config.cameraId = Arg('cameraId') || 0;

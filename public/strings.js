@@ -169,6 +169,8 @@ var strings = {
 		'Device',
 		'Digital',
 		'Downgrade',
+		'Heart',
+		'Heartrate',
 		'Health',
 		'Height',
 		'Index',
@@ -178,20 +180,36 @@ var strings = {
 		'Oximeter',
 		'Process',
 		'Pulse',
+		'Pulseoximeter',
 		'Qual',
 		'Quality',
 		'Rate',
+		'RR',
 		'Segment',
 		'Upgrade',
 		'Vacuum',
 		'Weight'
 	]
 };
+strings.all = [].concat(
+	strings.fluids,
+	strings.bodyParts,
+	strings.raw,
+	strings.words
+);
 
 function generateLiteral() {
 	return _.sample(strings.words, _.random(2, 3)).join('_');
 }
 
 function generatePhrase() {
-
+	var phrase = _.sample(strings.all, _.random(2, 3)).join(' ');
+	var choice = Math.random();
+	if(choice < .1) { // 10% uppercase
+		return phrase.toUpperCase();
+	}
+	if(choice < .5) { // 40% lowercase
+		return phrase.toLowerCase();
+	}
+	return phrase;
 }
