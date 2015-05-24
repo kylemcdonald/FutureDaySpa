@@ -3,10 +3,10 @@
 ## Setup and Run
 
 1. Install [Chrome](https://www.google.com/chrome/browser/desktop/index.html)
-2. Install [git](http://git-scm.com/download/mac)
-3. Install [Node.js](http://nodejs.org/)
-
-Git can also be installed with HomeBrew, but Node.js should be installed the usual way.
+2. Install [Homebrew](http://brew.sh/)
+3. Install git: `brew install git`
+4. Install imagemagick: `brew install imagemagick`
+5. Install [Node.js](http://nodejs.org/)
 
 Then open Terminal and enter:
 
@@ -46,7 +46,9 @@ If `futuredayspa.local` does not resolve, you may need to assign a static IP to 
 
 The tablets will then show the video stream after a delay of, at most, a few seconds. Swipe up in the middle of the screen to make the address bar disappear.
 
-As a final step in configuration, you'll need to map the serial numbers of the pulse oximeters to the corresponding `cameraId` they'll be beneath. If you take a reading with the pulse oximeter (can take up to 30 seconds) then go to [this endpoint](http://qualcomm-lucymcrae.herokuapp.com/get/data) the most recent data will have the serial of that device. Modify [these lines](https://github.com/kylemcdonald/FutureDaySpa/blob/master/public/config.js#L3-L4) to match the serial to the `cameraId`.
+As a final step in configuration, you'll need to map the serial numbers of the pulse oximeters to the corresponding `cameraId` they'll be beneath. If you take a reading with the pulse oximeter (can take up to 30 seconds) then go to [this endpoint](http://qualcomm-lucymcrae.herokuapp.com/get/data) the most recent data will have the serial of that device. Modify [public/config.js](https://github.com/kylemcdonald/FutureDaySpa/blob/master/public/config.js#L3-L4) to match the serial to the `cameraId`.
+
+For printing, the parameters are stored in [config.json](https://github.com/kylemcdonald/FutureDaySpa/blob/master/config.json). Setting the DPI only controls the rendering resolution of the page, it is not used in the printer options.
 
 ## Tablets
 
