@@ -34,6 +34,16 @@ function cycleCrosshairsLabel() {
     };
   });
 
+  var percentage = d3.select('#crosshairs-percentage');
+  percentage.transition()
+    .duration(250)
+    .style('opacity', 0)
+    .style('padding-top', '10px')
+    .transition()
+    .style('padding-top', '0px')
+    .duration(250)
+    .style('opacity', 1);
+
   var crosshairs = d3.select('#crosshairs');
   crosshairs.transition()
     .duration(duration / 2)
