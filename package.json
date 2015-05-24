@@ -21,7 +21,6 @@
     "express": "^4.12.4",
     "body-parser": "^1.12.4",
     "mkdirp": "^0.5.1",
-    "webshot": "^0.16.0",
-    "printer": "git+https://github.com/tojocky/node-printer.git"
+    "webshot": "^0.16.0"
   }
 }
