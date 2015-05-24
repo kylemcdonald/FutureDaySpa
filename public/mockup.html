@@ -164,13 +164,6 @@ body {
   font-size: 11px;
   line-height: 15px;
 }
-#mockup {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1280px;
-  display: none;
-}
 </style>
 <script>
 // might need to use this to trigger phantomjs
@@ -281,14 +274,6 @@ $(function() {
       .style('opacity', 1);
   })
 })
-$(window).keypress(function(event){
-    if(String.fromCharCode(event.which) == '.') {
-      $('#mockup').show();
-    }
-});
-$(window).keyup(function(event){
-    $('#mockup').hide();
-});
 </script>
 </head>
 <body>
@@ -353,6 +338,5 @@ $(window).keyup(function(event){
     vacuum therapy
   </p>
 </div>
-<img id="mockup" src="assets/mockup-2x.png"/>
 </body>
 </html>
