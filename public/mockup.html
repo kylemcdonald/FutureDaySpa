@@ -112,15 +112,22 @@ body {
   left: 673px;
   top: 342px;
 }
+#crosshairs * {
+  float: left;
+}
 #crosshairs-text {
-  position: absolute;
   text-transform: uppercase;
   text-rendering: geometricPrecision;
   opacity: .8;
   font-size: 17.5px;
+  padding: 0;
+  margin: 0 .5em;
+  position: relative;
+  top: -.25em;
   letter-spacing: .080em;
-  left: 740px;
-  top: 340px;
+}
+#crosshairs-text * {
+  clear: both;
 }
 #debug-info {
   position: absolute;
@@ -245,10 +252,12 @@ $(window).keyup(function(event){
 <div id="overall-text" class="dial-text precise">
   <span id="overall-number">30</span><span class="percent">%</span>
 </div>
-<img id="crosshairs" src="assets/crosshairs.svg"/>
-<div id="crosshairs-text" class="precise">
-  <div id="crosshairs-label">device_QUAL_Life</div>
-  <div><span id="crosshairs-number">09</span>%</div>
+<div id="crosshairs" class="precise">
+  <img src="assets/crosshairs.svg"/>
+  <div id="crosshairs-text">
+    <div id="crosshairs-label">device_QUAL_Life</div>
+    <div><span id="crosshairs-number">09</span>%</div>
+  </div>
 </div>
 <div id="debug-info" class="precise">
   <p id="debug-title">Process Vacuum Therapy</p>
