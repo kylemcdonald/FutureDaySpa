@@ -1,10 +1,13 @@
 <html>
 <head>
 <title>Future Day Spa</title>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-<script src="lib/arg-1.3.1.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="lib/arg-1.3.1.min.js"></script>
 <script src="config.js"></script>
+<script src="strings.js"></script>
 <style>
 @font-face {
   font-family: 'Avenir';
@@ -50,7 +53,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
 }
 #mono-column-0 {
   font-family: monospace;
@@ -153,11 +155,41 @@ body {
 }
 </style>
 <script>
+// might need to use this to trigger phantomjs
+function doneRendering() {
+  setTimeout(function() {
+    window.callPhantom && window.callPhantom('takeShot');
+  }, 500);
+}
+
+function cycleCrosshairsLabel() {
+  var label = $('#crosshairs-label');
+  label.text(generateLiteral());
+  var number = d3.select('#crosshairs-number');
+  var duration = _.random(
+    config.crosshairs.cycle.min,
+    config.crosshairs.cycle.max);
+  number.transition()
+    .duration(duration)
+    .tween("text", function() {
+    var start = parseInt(this.textContent);
+    var end = _.random(0, 99);
+    var i = d3.interpolateRound(start, end);
+    return function(t) {
+      var text = i(t)
+      if(text < 10) { text = '0' + text; }
+      this.textContent = text;
+    };
+  }).ease('cubic');
+  setTimeout(cycleCrosshairsLabel, duration);
+}
+
 $(function() {
   var screenshot = Arg('screenshot');
   if(screenshot) {
-    $('#background').prop('src', 'screenshots/'+cameraId+'/'+screenshot);
+    $('#background').prop('src', 'screenshots/'+config.cameraId+'/'+screenshot);
   }
+  cycleCrosshairsLabel();
 })
 $(window).keypress(function(event){
     if(String.fromCharCode(event.which) == '.') {
@@ -216,7 +248,7 @@ $(window).keyup(function(event){
 <img id="crosshairs" src="assets/crosshairs.svg"/>
 <div id="crosshairs-text" class="precise">
   <div id="crosshairs-label">device_QUAL_Life</div>
-  <div id="crosshairs-number">09%</div>
+  <div><span id="crosshairs-number">09</span>%</div>
 </div>
 <div id="debug-info" class="precise">
   <p id="debug-title">Process Vacuum Therapy</p>

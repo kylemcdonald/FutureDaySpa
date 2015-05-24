@@ -25,15 +25,18 @@ io.on('connection', function (socket) {
 });
 
 app.post('/screenshot', function(req, res) {
+	console.log('/screentshot');
+	console.log(req.query);
 	var cameraId = req.query.cameraId;
 	var dir = 'public/screenshots/' + cameraId + '/';
+	console.log('mkdirp ' + dir);
 	mkdirp(dir, function (err) {
 	    if (err) {
 	    	console.error(err);
 	    	return;
 	    }
 		var filename = dir + (new Date()) + '.jpg';
-		console.log('saving image to ' + filename);
+		console.log('saving screenshot to: ' + filename);
 		fs.writeFile(filename, req.body, 'binary', function(err) {
 			if(err) console.log(err);
 		});
@@ -42,10 +45,13 @@ app.post('/screenshot', function(req, res) {
 })
 
 app.get('/print', function(req, res) {
+	console.log('/print');
+	console.log(req.query);
 	var cameraId = req.query.cameraId;
 	var screenshot = req.query.screenshot; // should pull this from the second-most recent screenshot
 	var dir = 'public/prints/' + cameraId + '/';
 	var filename = dir + (new Date()) + '.png';
+	console.log('mkdirp ' + dir);
 	mkdirp(dir, function (err) {
 	    if (err) {
 	    	console.error(err);
@@ -54,6 +60,8 @@ app.get('/print', function(req, res) {
 		var zoomFactor = 2;
 		var options = 
 		{
+			// timeout: 10000,
+			// takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,
 			windowSize: { 
 				width: 1280 * zoomFactor,
@@ -61,11 +69,14 @@ app.get('/print', function(req, res) {
 			}
 		};
 		var url = 'http://localhost:8000/mockup.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
+		console.log('webshot\n\tfrom: ' + url + '\n\tto: ' + filename);
 		webshot(url, filename, options, function (err) {
 		    if (err) {
 		    	console.error(err);
+		    	// could try hitting /print again here
 		    	return;
 		    }
+		    console.log('saved');
 		    // now position `filename` on the page and print
 		    // with the `printer` module
 		})

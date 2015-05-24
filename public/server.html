@@ -97,7 +97,7 @@ function saveScreenshot() {
   canvas.toBlob(
         function (blob) {
             var req = new XMLHttpRequest();
-            req.open('POST', 'screenshot?cameraId='+cameraId, true);
+            req.open('POST', 'screenshot?cameraId='+config.cameraId, true);
             req.onload = function (event) {
               console.log('Uploaded blob successfully:');
               console.log(event);
@@ -117,7 +117,7 @@ function gotSources(sourceInfos) {
     if (sourceInfo.kind === 'video') {
       console.log(sourceInfo);
       console.log(sourceInfo.id + ' / ' + sourceInfo.label + ' / ' + sourceInfo.kind);
-      if (videoCount == cameraId) {
+      if (videoCount == config.cameraId) {
         var constraints = 
         {
           audio: false,
@@ -178,7 +178,7 @@ function makeCall(clientId) {
 
 // Click handlers setup
 $(function(){
-  $('#camera-id').text(cameraId);
+  $('#camera-id').text(config.cameraId);
 
   $('#make-call').click(function(){
     // Initiate a call!
@@ -237,7 +237,7 @@ voicemailSocket.on('status', function (data) {
 voicemailSocket.on('voicemail', function (data) {
   console.log('Got voicemail:');
   console.log(data);
-  if(data.cameraId == cameraId) {
+  if(data.cameraId == config.cameraId) {
     makeCall(data.clientId);
   }
 });
@@ -252,9 +252,9 @@ dataSocket.on('update', function (data) {
   console.log('Got heart rate update');
   console.log(data);
   $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
-  if(data.serial == curSerial) {
+  if(data.serial == config.curSerial) {
     console.log('Updating records from database');
-    $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+curSerial, function (data) {
+    $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+config.curSerial, function (data) {
       hrData = data;
     })
   }

@@ -2,10 +2,15 @@
 <!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="93.615px" height="92.854px" viewBox="0 0 93.615 92.854" enable-background="new 0 0 93.615 92.854" xml:space="preserve">
-<circle fill="none" stroke="#FFFFFF" stroke-width="1.4569" stroke-miterlimit="10" cx="46.808" cy="46.427" r="30.432"/>
-<g>
-	<line fill="none" stroke="#FFFFFF" stroke-width="0.6993" stroke-miterlimit="10" x1="46.808" y1="0" x2="46.808" y2="92.854"/>
-	<line fill="none" stroke="#FFFFFF" stroke-width="0.6993" stroke-miterlimit="10" x1="0" y1="46.427" x2="93.615" y2="46.427"/>
-</g>
+	 width="57.32px" height="55.641px" viewBox="0 0 57.32 55.641" enable-background="new 0 0 57.32 55.641" xml:space="preserve">
+<line opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" x1="28.777" y1="11.466" x2="28.777" y2="43.517"/>
+<line opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" x1="12.752" y1="27.491" x2="44.438" y2="27.491"/>
+<path opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" d="
+	M17.08,0.728H4.521c-2.094,0-3.792,1.698-3.792,3.792V17.08"/>
+<path opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" d="
+	M0.728,38.561V51.12c0,2.094,1.698,3.792,3.792,3.792H17.08"/>
+<path opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" d="
+	M40.24,54.913h12.559c2.094,0,3.792-1.698,3.792-3.792V38.561"/>
+<path opacity="0.75" fill="none" stroke="#F1BFD9" stroke-width="1.4569" stroke-linecap="round" stroke-miterlimit="10" d="
+	M56.591,17.08V4.521c0-2.094-1.698-3.792-3.792-3.792H40.24"/>
 </svg>
