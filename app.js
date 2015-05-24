@@ -1,6 +1,6 @@
 var config = require('./config.json');
-var util = require('util');
-var printer = require('printer');
+var sys = require('sys');
+var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
 var webshot = require('webshot');
 var bodyParser = require('body-parser')
@@ -32,7 +32,6 @@ app.post('/screenshot/upload', function(req, res) {
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
 	var dir = 'public/screenshots/' + cameraId + '/';
-	console.log('mkdirp ' + dir);
 	mkdirp(dir, function (err) {
 	    if (err) {
 	    	console.error(err);
@@ -42,7 +41,7 @@ app.post('/screenshot/upload', function(req, res) {
 		console.log('saving screenshot to: ' + filename);
 		fs.writeFile(filename, req.body, 'binary', function(err) {
 			if(err) console.log(err);
-			else console.log('saved');
+			else console.log('saved screenshot');
 		});
 	});
 	res.sendStatus(200);
@@ -79,27 +78,6 @@ app.get('/screenshot/recent', function(req, res) {
 	res.sendfile(path);
 })
 
-// just get the first printer, not necessarily the default
-function getPrinterName() {
-	var printers = printer.getPrinters();
-	return (printers && printers[0].name) || '';
-}
-
-app.get('/print/info', function(req, res) {
-	var printers = printer.getPrinters();
-	var options = printers.forEach(function(cur){
-		cur.selectedPaperSize = printer.getSelectedPaperSize(cur.name);
-		cur.supportedJobCommands = printer.getSupportedJobCommands(cur.name);
-		cur.supportedPrintFormats = printer.getSupportedPrintFormats(cur.name);
-		cur.printerDriverOptions = printer.getPrinterDriverOptions(cur.name);
-	});
-	res.json({
-		printerName: getPrinterName(),
-		printers: printers,
-		options: options
-	});
-})
-
 app.get('/print', function(req, res) {
 	console.log('/print');
 	console.log(req.query);
@@ -108,7 +86,6 @@ app.get('/print', function(req, res) {
 	var screenshot = getClosestScreenshot(cameraId, recently);
 	var dir = 'public/prints/' + cameraId + '/';
 	var filename = dir + (new Date()) + '.png';
-	console.log('mkdirp ' + dir);
 	mkdirp(dir, function (err) {
 	    if (err) {
 	    	console.error(err);
@@ -136,21 +113,24 @@ app.get('/print', function(req, res) {
 		    	return;
 		    }
 		    console.log('saved');
-		    // now position `filename` on the page and print
-		    // with the `printer` module
+		    // now position `filename` on the page
 
-		    printer.printFile({
-		    	filename: filename,
-		    	printer: getPrinterName(),
-		    	options: {
-
-		    	},
-		    	docname: screenshot,
-		    	success: function(jobId) {
-					console.log('printing success: ' + jobId);
-		    	},
-		    	error: function(err) {
-					console.log('printing error: ' + err);
+		    // print with lpr
+		    var cmd = [
+		    	'lpr',
+		    	'-T "' + cameraId + ': ' + screenshot + '"',
+		    	'-o landscape',
+		    	'-o fit-to-page',
+		    	'-o page-top=0',
+		    	'-o page-right=0',
+		    	'-o page-bottom=0',
+		    	'-o page-left=0',
+		    	'-o media=Custom.' + config.mediaDimensions,
+		    	'"' + filename + '"'
+	    	];
+		    exec(cmd.join(' '), function (error, stdout, stderr) {
+		    	if (error !== null) {
+		    		console.log('exec error: ' + error);
 		    	}
 		    })
 		})
