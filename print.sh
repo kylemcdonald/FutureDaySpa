@@ -6,6 +6,7 @@ mogrify \
 	"$7"
 lpr \
 	-o fit-to-page \
+	-o landscape \
 	-o page-top=0 \
 	-o page-right=0 \
 	-o page-bottom=0 \
