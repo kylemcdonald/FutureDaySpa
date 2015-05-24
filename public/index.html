@@ -13,14 +13,6 @@
 <script src="config.js"></script>
 <script src="strings.js"></script>
 <style>
-body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-body {
-  background-color: black;
-}
 #debug, div, h1, h2, h3, p {
   margin: .2em;
   padding: 0;
@@ -39,6 +31,7 @@ body {
   left: 25px;
   bottom: 25px;
   background-color: white;
+  color: black;
 }
 </style>
 </head>
@@ -48,29 +41,7 @@ body {
   <video id="their-video" autoplay></video>
   
   <div id="debug">
-
-      <!-- Steps -->
-      <div>
-        <h2>Client <span id="camera-id">...</span></h2>
-
-        <!-- Make calls to others -->
-        <div id="step2">
-          <p>Your id: <span id="my-id">...</span></p>
-        </div>
-
-        <!-- Call in progress -->
-        <div id="step3">
-          <p>Their id: <span id="their-id">...</span></p>
-          <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
-        </div>
-
-        <!-- extra -->
-        <div>
-          <p><a href="#" class="pure-button" id="refresh">Refresh</a></p>
-          <p>Resolution: <span id="resolution">...</span></p>
-          <p>Latest data: <span id="latest-data">...</span></p>
-        </div>
-      </div>
+    <p><span id="latest-data">...</span></p>
   </div>
 
 <script>
@@ -80,7 +51,7 @@ function leaveVoicemail() {
   }
   var query =
     '?clientId=' + peer.id +
-    '&cameraId=' + Arg('cameraId');    
+    '&cameraId=' + config.cameraId;    
   $.get('voicemail' + query, function( data ) {
     console.log('Left a voicemail message ' + query);
   });
@@ -89,11 +60,6 @@ function leaveVoicemail() {
 
 // PeerJS object
 var peer = new Peer({ key: config.peerjsApiKey });
-
-peer.on('open', function(){
-  $('#my-id').text(peer.id);
-  leaveVoicemail();
-});
 
 // Receiving a call
 peer.on('call', function(call){
@@ -108,14 +74,9 @@ peer.on('error', function(err){
   step2();
 });
 
-function updateResolution() {
-  var resolution = $(window).width() + "x" + $(window).height();
-  $('#resolution').text(resolution);
-}
-
 // Click handlers setup
 $(function(){
-  $('#camera-id').text(cameraId);
+  $('#camera-id').text(config.cameraId);
 
   $('#end-call').click(function(){
     hangUp();
@@ -127,14 +88,8 @@ $(function(){
     location.reload();
   })
 
-  updateResolution();
-
   // Get things started
-  step1();
-});
-
-$(window).resize(function() {
-  updateResolution();
+  step2();
 });
 
 function hangUp() {
@@ -145,13 +100,7 @@ function hangUp() {
   }
 }
 
-function step1 () {
-  step2();
-}
-
 function step2 () {
-  $('#step3').hide();
-  $('#step2').show();
   hangUp();
   leaveVoicemail();
 }
@@ -168,7 +117,6 @@ function step3 (call) {
   window.existingCall = call;
   $('#their-id').text(call.peer);
   call.on('close', step2);
-  $('#step3').show();
 }
 
 var hrData;

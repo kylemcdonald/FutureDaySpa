@@ -75,7 +75,7 @@ function leaveVoicemail() {
   }
   var query =
     '?clientId=' + peer.id +
-    '&cameraId=' + Arg('cameraId');    
+    '&cameraId=' + config.cameraId;    
   $.get('voicemail' + query, function( data ) {
     console.log('Left a voicemail message ' + query);
   });
@@ -110,7 +110,7 @@ function updateResolution() {
 
 // Click handlers setup
 $(function(){
-  $('#camera-id').text(cameraId);
+  $('#camera-id').text(config.cameraId);
 
   $('#end-call').click(function(){
     hangUp();
