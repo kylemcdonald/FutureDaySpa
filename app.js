@@ -110,15 +110,15 @@ app.get('/print', function(req, res) {
 		var zoomFactor = imageSize[0] / baseSize[0];
 		var options = 
 		{
-			// timeout: 10000,
-			// takeShotOnCallback: true, // might need to switch
+			timeout: 30 * 1000,
+			takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,
 			windowSize: {
 				width: Math.round(baseSize[0] * zoomFactor),
 				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
-		var url = 'http://localhost:8000/mockup.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
+		var url = 'http://localhost:8000/?cameraId=' + cameraId + '&screenshot=' + screenshot;
 		console.log('webshot');
 		console.log('\tfrom: ' + url);
 		console.log('\tto: ' + filename);
@@ -126,16 +126,11 @@ app.get('/print', function(req, res) {
 		webshot(url, filename, options, function (err) {
 		    if (err) {
 		    	console.error(err);
-		    	// could try hitting /print again here
+		    	// could try hitting /print again here?
 		    	return;
 		    }
 		    console.log('saved webshot');
 
-    		// then place on page with image magick
-    		// this whole section is blocking, which is bad practice
-    		// but it's helpful for making lpr work correctly
-    		// otherwise the image isn't ready in time
-    		// we could also call a script
 		    var mediaSize = [
 		    	Math.round(config.mediaDimensions[0] * config.printPpi),
 		    	Math.round(config.mediaDimensions[1] * config.printPpi)
@@ -155,30 +150,6 @@ app.get('/print', function(req, res) {
 	    		config.mediaDimensions[1],
 	    		quote(filename)
     		]);
-
-	    	// sh([
-	    	// 	'mogrify',
-	    	// 	'-background none',
-	    	// 	'-extent ' + mediaSize[0] + 'x' + mediaSize[1],
-	    	// 	'-page +' + imageOffset[0] + '+' + imageOffset[1],
-	    	// 	'-flatten',
-	    	// 	quote(filename)
-    		// ]);
-
-		    // // print with lpr
-		    // sh([
-		    // 	'lpr',
-		    // 	// '-o landscape',
-		    // 	'-o fit-to-page',
-		    // 	'-o page-top=0',
-		    // 	'-o page-right=0',
-		    // 	'-o page-bottom=0',
-		    // 	'-o page-left=0',
-		    // 	'-o PageSize=Custom.' + 
-		    // 		config.mediaDimensions[0] + 'x' +
-		    // 		config.mediaDimensions[1] + 'in',
-		    // 	quote(filename)
-	    	// ]);
 		})
 	})
 	res.sendStatus(200);

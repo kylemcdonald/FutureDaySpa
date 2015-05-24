@@ -79,30 +79,128 @@ function cycleMono() {
   setTimeout(cycleMono, 1000);
 }
 
-$(function() {
-  var screenshot = Arg('screenshot');
-  if(screenshot) {
-    $('#background').prop('src', 'screenshots/'+config.cameraId+'/'+screenshot);
+function startObsessing () {
+  hangUp();
+  leaveVoicemail();
+}
+
+function hangUp() {
+  // Hang up on an existing call if present
+  if (window.existingCall) {
+    window.existingCall.close();
+    window.existingCall = null;
   }
+}
 
-  cycleCrosshairsLabel();
-  cycleDebugTitle();
-  cycleDebugText();
-  cycleMono();
+function leaveVoicemail() {
+  if(window.existingCall) {
+    return;
+  }
+  if(peer.id) {
+    var query = {
+      clientId: peer.id,
+      cameraId: config.cameraId
+    };
+    $.get('voicemail', query, function( data ) {
+      console.log('Left a voicemail message from ' + query.clientId + ' / ' + query.cameraId);
+    });
+  }
+  setTimeout(leaveVoicemail, config.voicemailTimeout);
+}
 
-  $('#debug-info').click(function() {
-    $.get('/print', { cameraId: config.cameraId });
-    d3.select('#debug-info')
-      .style('opacity', 1)
-      .transition()
-      .duration(500)
-      .style('opacity', 0)
-      .transition()
-      .style('visibility', 'hidden')
-      .transition()
-      .delay(10000)
-      .duration(2000)
-      .style('visibility', 'visible')
-      .style('opacity', 1);
+// PeerJS object
+var peer = new Peer({ key: config.peerjsApiKey });
+
+// Receiving a call
+peer.on('call', function(call){
+  // Answer the call automatically (instead of prompting user) for demo purposes
+  // call.answer(window.localStream);
+  call.answer();
+  step3(call);
+});
+peer.on('error', function(err){
+  startObsessing();
+});
+
+function step3 (call) {
+  hangUp();
+
+  // Wait for stream on the call, then set peer video display
+  call.on('stream', function(stream){
+    $('#their-video').prop('src', URL.createObjectURL(stream));
+  });
+
+  // UI stuff
+  window.existingCall = call;
+  $('#their-id').text(call.peer);
+  call.on('close', startObsessing);
+}
+
+var hrData;
+function updateHrData() {
+  console.log('Updating records from database');
+  $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+config.curSerial, function (data) {
+    hrData = data;
+    $('#record-count').text(data.length + ' records');
   })
+}
+
+var dataSocket = io.connect('http://qualcomm-lucymcrae.herokuapp.com/');
+dataSocket.on('status', function (data) {
+  console.log(data);
+  dataSocket.emit('status', { client: location.href });
+});
+dataSocket.on('update', function (data) {
+  console.log('Got heart rate update');
+  console.log(data);
+  $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
+  if(data.serial == config.curSerial) {
+    updateHrData();
+  }
+});
+
+$(function() {
+  if(!Arg('debug')) {
+		var screenshot = Arg('screenshot');
+		if(screenshot) {
+			$('#background').prop('src', 'screenshots/'+config.cameraId+'/'+screenshot);
+		} else {
+			startObsessing();
+		}
+	}
+
+	updateHrData();
+
+	cycleCrosshairsLabel();
+	cycleDebugTitle();
+	cycleDebugText();
+	cycleMono();
+
+	doneRendering();
+
+	$('#debug-info').click(function() {
+		$.get('/print', { cameraId: config.cameraId });
+		d3.select('#debug-info')
+		  .style('opacity', 1)
+		  .transition()
+		  .duration(500)
+		  .style('opacity', 0)
+		  .transition()
+		  .style('visibility', 'hidden')
+		  .transition()
+		  .delay(10000)
+		  .duration(2000)
+		  .style('visibility', 'visible')
+		  .style('opacity', 1);
+	})
+})
+
+$(document).on('mousemove touchmove', function(event) {
+	d3.select('#debug')
+		.transition()
+		.style('opacity', 1)
+		.transition()
+		.delay(3000)
+		.style('opacity', 0)
+		.ease('linear');
 })

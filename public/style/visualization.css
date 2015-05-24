@@ -9,6 +9,11 @@
   src: url('../assets/akzidenzgroteskbq-light.otf') format('opentype');
 }
 @font-face {
+  font-family: 'Apercu Mono';
+  font-weight: normal;
+  src: url('../assets/apercu_mono.otf') format('opentype');
+}
+@font-face {
   font-family: 'Apercu';
   font-weight: normal;
   src: url('../assets/apercu_regular.otf') format('opentype');
@@ -46,17 +51,17 @@ body {
   top: 0;
   left: 0;
 }
-#mono-column-0 {
-  font-family: monospace;
+#mono-column-0, #mono-column-1 {
+  font-family: 'Apercu Mono';
   font-size: 6px;
+  opacity: .34;
+}
+#mono-column-0 {
   position: absolute;
   top: 30px;
   left: 30px;
-  opacity: .34;
 }
 #mono-column-1 {
-  font-family: monospace;
-  font-size: 6px;
   position: absolute;
   top: 30px;
   left: 320px;
@@ -153,4 +158,21 @@ body {
   opacity: .35;
   font-size: 11px;
   line-height: 15px;
+}
+#their-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 720px;
+}
+#debug {
+  border-radius: 4px;
+  padding: .5em;
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+  background-color: #333;
+  color: #ccc;
+  opacity: 0;
 }
