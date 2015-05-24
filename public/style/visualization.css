@@ -1,0 +1,156 @@
+﻿@font-face {
+  font-family: 'Avenir';
+  font-weight: 300;
+  src: url('assets/AvenirLTStd-Light.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Akzidenz Grotesk BQ';
+  font-weight: 300;
+  src: url('assets/akzidenzgroteskbq-light.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Apercu';
+  font-weight: normal;
+  src: url('assets/apercu_regular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Apercu';
+  font-weight: bold;
+  src: url('assets/apercu_bold.otf') format('opentype');
+}
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  /* offscreen elements resize the android viewport
+  and this doesn't seem to help, so i just avoid it instead */
+}
+body {
+  background-color: black;
+  font-family: 'Apercu';
+  color: white;
+}
+.precise {
+  text-rendering: geometricPrecision;
+}
+#background {
+  width: 1280px;
+}
+#background * {
+  width: 100%;
+}
+#vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#mono-column-0 {
+  font-family: monospace;
+  font-size: 6px;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  opacity: .34;
+}
+#mono-column-1 {
+  font-family: monospace;
+  font-size: 6px;
+  position: absolute;
+  top: 30px;
+  left: 320px;
+}
+.mono-body {
+  opacity: .34;  
+}
+#mono-final {
+  opacity: 1.;
+}
+#graph {
+  position: absolute;
+  left: 28px;
+  top: 524px;
+}
+#dials {
+  position: absolute;
+  left: 1057px;
+  top: 584px;
+}
+.dial-text {
+  font-family: 'Akzidenz Grotesk BQ';
+  font-weight: 300;
+  font-size: 12px;
+}
+#spo2-text {
+  position: absolute;
+  left: 1084px;
+  top: 618px;
+  width: 30px;
+  text-align: center;
+}
+#overall-text {
+  position: absolute;
+  left: 1188px;
+  top: 618px;
+  width: 30px;
+  text-align: center;
+}
+.percent {
+  font-size: 10px;
+}
+#crosshairs {
+  position: absolute;
+  left: 673px;
+  top: 342px;
+}
+#crosshairs img {
+  margin-bottom: .5em;
+}
+#crosshairs * {
+  float: left;
+}
+#crosshairs-text {
+  text-transform: uppercase;
+  text-rendering: geometricPrecision;
+  opacity: .8;
+  font-size: 17.5px;
+  padding: 0;
+  margin: 0 .5em;
+  position: relative;
+  top: -.25em;
+  letter-spacing: .080em;
+}
+#crosshairs-text * {
+  clear: both;
+}
+#debug-info {
+  cursor: hand;
+  position: absolute;
+  left: 950px;
+  top: 27px;
+  width: 300px;
+  font-size: 11.7px;
+  padding: 0;
+  text-align: right;
+  font-family: 'Avenir';
+  font-weight: 300;
+  letter-spacing: 0.200em;
+}
+#debug-info * {
+  margin: 0;
+  padding: 0;
+}
+#debug-title {
+  margin-bottom: .5em;
+  height: 1.2em;
+  overflow: hidden;
+  text-transform: capitalize;
+}
+#debug-body {
+  float: right;
+  width: 200px;
+  opacity: .35;
+  font-size: 11px;
+  line-height: 15px;
+}
