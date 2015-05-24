@@ -97,7 +97,7 @@ function saveScreenshot() {
   canvas.toBlob(
         function (blob) {
             var req = new XMLHttpRequest();
-            req.open('POST', 'screenshot?cameraId='+config.cameraId, true);
+            req.open('POST', 'screenshot/upload?cameraId='+config.cameraId, true);
             req.onload = function (event) {
               console.log('Uploaded blob successfully:');
               console.log(event);

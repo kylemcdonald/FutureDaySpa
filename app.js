@@ -24,8 +24,8 @@ io.on('connection', function (socket) {
 	})
 });
 
-app.post('/screenshot', function(req, res) {
-	console.log('/screentshot');
+app.post('/screenshot/upload', function(req, res) {
+	console.log('/screentshot/upload');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
 	var dir = 'public/screenshots/' + cameraId + '/';
@@ -42,6 +42,34 @@ app.post('/screenshot', function(req, res) {
 		});
 	});
 	res.sendStatus(200);
+})
+
+function getClosestScreenshot(cameraId, date) {
+	var dir = 'public/screenshots/' + cameraId + '/';
+	var files = fs.readdirSync(dir);
+	if(!files) return null;
+	files = files.filter(function(file) {
+		if(file.match(/\.jpg$/i)) return file;
+	})
+	if(!files) return null;
+	var bestDiff = 0;
+	var bestPath = null;
+	files.forEach(function(file) {
+		var path = dir + '/' + file;
+		var stats = fs.statSync(path);
+		var curDate = new Date(stats.mtime);
+		var curDiff = date - curDate;
+		if(curDiff < bestDiff || bestPath == null) {
+			bestDiff = curDiff;
+			bestPath = path;
+		}
+	})
+	return bestPath;
+}
+
+app.get('/screenshot/recent', function(req, res) {
+	var cameraId = req.query.cameraId;
+	res.sendfile(getClosestScreenshot(cameraId, new Date()));
 })
 
 app.get('/print', function(req, res) {

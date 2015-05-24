@@ -19,7 +19,7 @@ var config = {
 		cycle: { min: 500, max: 4000 },
 	},
 	debugBody: {
-		maxLength: 160,
+		maxLength: 140,
 		cycle: { min: 30, max: 1000 },
 	}
 };

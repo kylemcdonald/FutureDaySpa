@@ -136,6 +136,7 @@ body {
   clear: both;
 }
 #debug-info {
+  cursor: hand;
   position: absolute;
   left: 1050px;
   top: 27px;
@@ -232,14 +233,42 @@ function cycleDebugText() {
   setTimeout(cycleDebugText, duration);  
 }
 
+function cycleMono() {
+  d3.select('#mono-final')
+    .style('opacity', 0)
+    .transition()
+    .duration(400)
+    .style('opacity', 1)
+    .ease('linear');
+  setTimeout(cycleMono, 1000);
+}
+
 $(function() {
   var screenshot = Arg('screenshot');
   if(screenshot) {
     $('#background').prop('src', 'screenshots/'+config.cameraId+'/'+screenshot);
   }
+
   cycleCrosshairsLabel();
   cycleDebugTitle();
   cycleDebugText();
+  cycleMono();
+
+  $('#debug-info').click(function() {
+    $.get('/print', { cameraId: config.cameraId });
+    d3.select('#debug-info')
+      .style('opacity', 1)
+      .transition()
+      .duration(500)
+      .style('opacity', 0)
+      .transition()
+      .style('visibility', 'hidden')
+      .transition()
+      .delay(10000)
+      .duration(2000)
+      .style('visibility', 'visible')
+      .style('opacity', 1);
+  })
 })
 $(window).keypress(function(event){
     if(String.fromCharCode(event.which) == '.') {
