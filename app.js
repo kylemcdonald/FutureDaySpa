@@ -1,6 +1,6 @@
 var config = require('./config.json');
 var sys = require('sys');
-var exec = require('child_process').exec;
+var child = require('child_process');
 var mkdirp = require('mkdirp');
 var webshot = require('webshot');
 var bodyParser = require('body-parser')
@@ -81,13 +81,7 @@ app.get('/screenshot/recent', function(req, res) {
 function sh(cmd) {
 	var cmdStr = cmd.join(' ');
 	console.log(cmdStr);
-	exec(cmdStr, function (error, stdout, stderr) {
-		// console.log(stdout);
-		// console.log(stderr);
-		if (error !== null) {
-			console.log('exec error: ' + error);
-		}
-	})
+	child.exec(cmdStr);
 }
 
 function quote(str) {
@@ -95,7 +89,6 @@ function quote(str) {
 }
 
 app.get('/print', function(req, res) {
-sh(['whoami']);
 	console.log('/print');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
@@ -139,6 +132,10 @@ sh(['whoami']);
 		    console.log('saved webshot');
 
     		// then place on page with image magick
+    		// this whole section is blocking, which is bad practice
+    		// but it's helpful for making lpr work correctly
+    		// otherwise the image isn't ready in time
+    		// we could also call a script
 		    var mediaSize = [
 		    	Math.round(config.mediaDimensions[0] * config.printPpi),
 		    	Math.round(config.mediaDimensions[1] * config.printPpi)
@@ -147,30 +144,41 @@ sh(['whoami']);
 		    	Math.round(config.imageOffset[0] * config.printPpi),
 		    	Math.round(config.imageOffset[1] * config.printPpi)
 	    	];
+
 	    	sh([
-	    		'mogrify',
-	    		'-background none',
-	    		'-extent ' + mediaSize[0] + 'x' + mediaSize[1],
-	    		'-page +' + imageOffset[0] + '+' + imageOffset[1],
-	    		'-flatten',
+	    		'./print.sh',
+	    		mediaSize[0],
+	    		mediaSize[1],
+	    		imageOffset[0],
+	    		imageOffset[1],
+	    		config.mediaDimensions[0],
+	    		config.mediaDimensions[1],
 	    		quote(filename)
     		]);
 
-		    // print with lpr
-		    sh([
-		    	'lp',
-		    	// '-T "' + cameraId + ': ' + screenshot + '"',
-		    	'-o landscape',
-		    	// '-o fit-to-page',
-		    	// '-o page-top=0',
-		    	// '-o page-right=0',
-		    	// '-o page-bottom=0',
-		    	// '-o page-left=0',
-		    	'-o media=Custom.' + 
-		    		2*config.mediaDimensions[0] + 'x' +
-		    		2*config.mediaDimensions[1] + 'in',
-		    	quote(filename)
-	    	]);
+	    	// sh([
+	    	// 	'mogrify',
+	    	// 	'-background none',
+	    	// 	'-extent ' + mediaSize[0] + 'x' + mediaSize[1],
+	    	// 	'-page +' + imageOffset[0] + '+' + imageOffset[1],
+	    	// 	'-flatten',
+	    	// 	quote(filename)
+    		// ]);
+
+		    // // print with lpr
+		    // sh([
+		    // 	'lpr',
+		    // 	// '-o landscape',
+		    // 	'-o fit-to-page',
+		    // 	'-o page-top=0',
+		    // 	'-o page-right=0',
+		    // 	'-o page-bottom=0',
+		    // 	'-o page-left=0',
+		    // 	'-o PageSize=Custom.' + 
+		    // 		config.mediaDimensions[0] + 'x' +
+		    // 		config.mediaDimensions[1] + 'in',
+		    // 	quote(filename)
+	    	// ]);
 		})
 	})
 	res.sendStatus(200);
