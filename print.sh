@@ -4,9 +4,11 @@ mogrify \
 	-page +$3+$4 \
 	-flatten \
 	"$7"
+sips \
+	-r 90
+	"$7"
 lpr \
 	-o fit-to-page \
-	-o landscape \
 	-o page-top=0 \
 	-o page-right=0 \
 	-o page-bottom=0 \
