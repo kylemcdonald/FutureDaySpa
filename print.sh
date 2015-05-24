@@ -13,4 +13,5 @@ lpr \
 	-o page-bottom=0 \
 	-o page-left=0 \
 	-o PageSize=Custom.$5x$6in \
+	-o media=Custom.$5x$6in \
 	"$7"
