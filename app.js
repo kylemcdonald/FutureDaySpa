@@ -1,4 +1,6 @@
 var config = require('./config.json');
+var util = require('util');
+var printer = require('printer');
 var mkdirp = require('mkdirp');
 var webshot = require('webshot');
 var bodyParser = require('body-parser')
@@ -77,6 +79,27 @@ app.get('/screenshot/recent', function(req, res) {
 	res.sendfile(path);
 })
 
+// just get the first printer, not necessarily the default
+function getPrinterName() {
+	var printers = printer.getPrinters();
+	return (printers && printers[0].name) || '';
+}
+
+app.get('/print/info', function(req, res) {
+	var printers = printer.getPrinters();
+	var options = printers.forEach(function(cur){
+		cur.selectedPaperSize = printer.getSelectedPaperSize(cur.name);
+		cur.supportedJobCommands = printer.getSupportedJobCommands(cur.name);
+		cur.supportedPrintFormats = printer.getSupportedPrintFormats(cur.name);
+		cur.printerDriverOptions = printer.getPrinterDriverOptions(cur.name);
+	});
+	res.json({
+		printerName: getPrinterName(),
+		printers: printers,
+		options: options
+	});
+})
+
 app.get('/print', function(req, res) {
 	console.log('/print');
 	console.log(req.query);
@@ -103,7 +126,9 @@ app.get('/print', function(req, res) {
 			}
 		};
 		var url = 'http://localhost:8000/mockup.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
-		console.log('webshot\n\tfrom: ' + url + '\n\tto: ' + filename);
+		console.log('webshot');
+		console.log('\tfrom: ' + url);
+		console.log('\tto: ' + filename);
 		webshot(url, filename, options, function (err) {
 		    if (err) {
 		    	console.error(err);
@@ -113,6 +138,21 @@ app.get('/print', function(req, res) {
 		    console.log('saved');
 		    // now position `filename` on the page and print
 		    // with the `printer` module
+
+		    printer.printFile({
+		    	filename: filename,
+		    	printer: getPrinterName(),
+		    	options: {
+
+		    	},
+		    	docname: screenshot,
+		    	success: function(jobId) {
+					console.log('printing success: ' + jobId);
+		    	},
+		    	error: function(err) {
+					console.log('printing error: ' + err);
+		    	}
+		    })
 		})
 	})
 	res.sendStatus(200);
