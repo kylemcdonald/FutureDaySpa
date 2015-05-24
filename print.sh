@@ -1,10 +1,11 @@
-mogrify \
+convert \
+	"$7" \
 	-background none \
 	-extent $1x$2 \
 	-page +$3+$4 \
 	-flatten \
+	-rotate 90 \
 	"$7"
-sips -r 90 "$7"
 lpr \
 	-o fit-to-page \
 	-o page-top=0 \
