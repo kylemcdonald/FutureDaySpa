@@ -1,4 +1,5 @@
 var strings = {
+	joinery: [' ../ ', ' /.. ', ' :: ', ' .. '],
 	fluids: [
 		'bile',
 		'blood',
@@ -161,12 +162,14 @@ var strings = {
 		'2net',
 		'Analysis',
 		'Analyze',
+		'Augment',
 		'Body',
 		'Compute',
 		'Communication',
 		'Comm',
 		'Data',
 		'Device',
+		'Decrement',
 		'Digital',
 		'Downgrade',
 		'Heart',
@@ -174,6 +177,7 @@ var strings = {
 		'Health',
 		'Height',
 		'Index',
+		'Increment',
 		'Life',
 		'Mass',
 		'Oxi',

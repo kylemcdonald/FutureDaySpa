@@ -213,9 +213,23 @@ function cycleDebugTitle() {
   var title = $('#debug-title');
   title.text(generatePhrase());
   var duration = _.random(
-    config.title.cycle.min,
-    config.title.cycle.max);
+    config.debugTitle.cycle.min,
+    config.debugTitle.cycle.max);
   setTimeout(cycleDebugTitle, duration);  
+}
+
+function cycleDebugText() {
+  var body = $('#debug-body');
+  var text = body.text() + _.sample(strings.joinery) + generatePhrase();
+  var chop = text.length - config.debugBody.maxLength;
+  if(chop > 0) {
+    text = text.substr(chop);
+  }
+  body.text(text);
+  var duration = _.random(
+    config.debugBody.cycle.min,
+    config.debugBody.cycle.max);
+  setTimeout(cycleDebugText, duration);  
 }
 
 $(function() {
@@ -225,6 +239,7 @@ $(function() {
   }
   cycleCrosshairsLabel();
   cycleDebugTitle();
+  cycleDebugText();
 })
 $(window).keypress(function(event){
     if(String.fromCharCode(event.which) == '.') {
