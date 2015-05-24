@@ -4,9 +4,7 @@ mogrify \
 	-page +$3+$4 \
 	-flatten \
 	"$7"
-sips \
-	-r 90
-	"$7"
+sips -r 90 "$7"
 lpr \
 	-o fit-to-page \
 	-o page-top=0 \
