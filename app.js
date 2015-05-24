@@ -1,3 +1,4 @@
+var config = require('./config.json');
 var mkdirp = require('mkdirp');
 var webshot = require('webshot');
 var bodyParser = require('body-parser')
@@ -39,6 +40,7 @@ app.post('/screenshot/upload', function(req, res) {
 		console.log('saving screenshot to: ' + filename);
 		fs.writeFile(filename, req.body, 'binary', function(err) {
 			if(err) console.log(err);
+			else console.log('saved');
 		});
 	});
 	res.sendStatus(200);
@@ -53,30 +55,34 @@ function getClosestScreenshot(cameraId, date) {
 	})
 	if(!files) return null;
 	var bestDiff = 0;
-	var bestPath = null;
+	var bestFile = null;
 	files.forEach(function(file) {
 		var path = dir + '/' + file;
 		var stats = fs.statSync(path);
 		var curDate = new Date(stats.mtime);
-		var curDiff = date - curDate;
-		if(curDiff < bestDiff || bestPath == null) {
+		var curDiff = Math.abs(date - curDate);
+		if(curDiff < bestDiff || bestFile == null) {
 			bestDiff = curDiff;
-			bestPath = path;
+			bestFile = file;
 		}
 	})
-	return bestPath;
+	return bestFile;
 }
 
 app.get('/screenshot/recent', function(req, res) {
 	var cameraId = req.query.cameraId;
-	res.sendfile(getClosestScreenshot(cameraId, new Date()));
+	var dir = 'public/screenshots/' + cameraId + '/';
+	var file = getClosestScreenshot(cameraId, new Date());
+	var path = dir + '/' + file;
+	res.sendfile(path);
 })
 
 app.get('/print', function(req, res) {
 	console.log('/print');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
-	var screenshot = req.query.screenshot; // should pull this from the second-most recent screenshot
+	var recently = (new Date()) - (config.screenshotRewindMinutes * 60 * 1000);
+	var screenshot = getClosestScreenshot(cameraId, recently);
 	var dir = 'public/prints/' + cameraId + '/';
 	var filename = dir + (new Date()) + '.png';
 	console.log('mkdirp ' + dir);
