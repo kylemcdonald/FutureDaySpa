@@ -290,9 +290,7 @@ $(function() {
 	$('#debug-info').click(function() {
     uploadSessionData();
 		$.get('/print', {
-      cameraId: config.cameraId,
-      begin: sessionData.begin.time,
-      end: sessionData.end.time
+      cameraId: config.cameraId
     });
 		d3.select('#debug-info')
 		  .style('opacity', 1)

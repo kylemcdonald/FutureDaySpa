@@ -6,7 +6,7 @@ var config = {
 	},
 	remote: 'http://qualcomm-lucymcrae.herokuapp.com',
 	peerjsApiKey: '8qwdecpywmkuik9',
-	screenshotTimeout: (2 * 60 * 1000), // every 2 minutes
+	screenshotTimeout: (60 * 1000), // every minute
 	screenshotInitial: (5 * 1000), // 5 seconds after startup
 	voicemailTimeout: (1 * 1000), // request connection every 1s
 
