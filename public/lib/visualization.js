@@ -102,6 +102,7 @@ function hangUp() {
   if (window.existingCall) {
     window.existingCall.close();
     window.existingCall = null;
+    console.log('hung up on existing call');
   }
 }
 
@@ -129,9 +130,13 @@ peer.on('call', function(call){
   hangUp();
   call.answer();
   window.existingCall = call;
+  console.log('answered incoming call:');
+  console.log(call);
 
   // Wait for stream, then set peer video display
   call.on('stream', function(stream){
+    console.log('setting stream:');
+    console.log(stream);
     $('#their-video').prop('src', URL.createObjectURL(stream));
   });
 
