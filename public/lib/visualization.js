@@ -115,7 +115,7 @@ function leaveVoicemail() {
       cameraId: config.cameraId
     };
     $.get('voicemail', query, function( data ) {
-      console.log('Left a voicemail message from ' + query.clientId + ' / ' + query.cameraId);
+      console.log('left a voicemail message from ' + query.clientId + ' / ' + query.cameraId);
     });
   }
   setTimeout(leaveVoicemail, config.voicemailTimeout);
@@ -146,7 +146,7 @@ peer.on('error', function(err){
 var sessions = [];
 var sessionData = {};
 function uploadSessionData() {
-  console.log('uploading session data');
+  console.log('uploading session data:');
   console.log(sessionData);
   $.post(
     config.remote + '/add/session',
@@ -154,15 +154,16 @@ function uploadSessionData() {
 }
 
 function updateHrVisuals(data) {
-  $('#record-count').text(sessions.length + ' sessions');
   var curSpo2 = sessionData.end.spo2;
   var curHr = sessionData.end.hr;
   $('#spo2-number').text(curSpo2);
   $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
+  $('#record-count').text(sessions.length + ' sessions');  
+  doneRendering();
 }
 
 function updateHrData() {
-  console.log('updating records from database');
+  console.log('updating records from database...');
   var url = config.remote + '/get/data';
   $('#records-link').attr('href', url);
   $.getJSON(url, {
@@ -170,17 +171,16 @@ function updateHrData() {
       limit: 2
     }, function (data) {
       sessionData = {
-        serial: config.curSerial,
         begin: data[0],
         end: data[1]
       }
-      console.log('updated sessionData');
+      console.log('updated sessionData:');
       console.log(sessionData);
       var url = config.remote + '/get/sessions';
-      $.getJSON(url, {
-        serial: config.curSerial
-      }, function(data) {
+      $.getJSON(url, function(data) {
         sessions = data;
+        console.log('updated sessions:');
+        console.log(sessions);
         if(sessions.length) {
           updateHrVisuals();
         }
@@ -190,12 +190,13 @@ function updateHrData() {
 
 var dataSocket = io.connect(config.remote);
 dataSocket.on('status', function (data) {
+  console.log('got status from dataSocket:');
   console.log(data);
   dataSocket.emit('status', { client: location.href });
 });
 dataSocket.on('update', function (data) {
   if(data.serial == config.curSerial) {
-    console.log('Heart rate update');
+    console.log('heart rate update:');
     console.log(data);
     updateHrData();
   }
@@ -211,14 +212,12 @@ $(function() {
 		}
 	}
 
-	updateHrData();
-
 	cycleCrosshairsLabel();
 	cycleDebugTitle();
 	cycleDebugText();
 	cycleMono();
 
-	doneRendering();
+  updateHrData();
 
 	$('#debug-info').click(function() {
     uploadSessionData();
