@@ -25,7 +25,8 @@ var config = {
 	},
 	graphBars: {
 		duration: { min: 200, max: 800 },
-		delay: 400,
+		durationOffset: 400,
+		delay: 4000,
 		count: 33,
 		dataRange: { min: 10, max: 100 },
 		colorWidth: 4,

@@ -64,14 +64,14 @@ function shiftData(bars) {
     .data(data)
     .transition()
     .delay(function(d, i) {
-      return ((config.graphBars.count - i - 1) * config.graphBars.delay) / config.graphBars.count;
+      return ((config.graphBars.count - i - 1) * config.graphBars.durationOffset) / config.graphBars.count;
     })
     .duration(function(d) {
       return _.random(minDuration, maxDuration);
     })
     .attr('y', function(d) { return y(d); })
     .attr('height', function(d) { return graphHeight - y(d); })
-  setTimeout(function() { shiftData(bars) }, maxDuration);
+  setTimeout(function() { shiftData(bars) }, config.graphBars.delay);
 }
 
 shiftData(createBars());
