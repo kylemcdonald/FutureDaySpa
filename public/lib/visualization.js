@@ -31,9 +31,7 @@ function cycleCrosshairsLabel() {
     var end = _.random(0, 99);
     var i = d3.interpolateRound(start, end);
     return function(t) {
-      var text = i(t)
-      if(text < 10) { text = '0' + text; }
-      this.textContent = text;
+      this.textContent = formatPercentage(i(t));
     };
   });
 
@@ -194,14 +192,33 @@ function calculateGains(sessions) {
   })
 }
 
-function updateHrVisuals(data) {
+function calculatePercentile(sample, data) {
+  var without = _.without(data, sample);
+  if(without.length == 0) {
+    return 50;
+  }
+  var sorted = without.sort();
+  var sortedIndex = _.sortedIndex(sorted, sample);
+  var percentile = sortedIndex / sorted.length;
+  return parseInt(percentile * 100);
+}
+
+function formatPercentage(x) {
+  return (x < 10 ? '0' : '') + x;
+}
+
+function updateHrVisuals() {
+  // show range (first in debug, then in range at bottom left)
   var curSpo2 = sessionData.end.spo2;
   var curHr = sessionData.end.hr;
-  // calculate gains for self
-  // calculate gains for everyone
-  // find percentile of self relative to everyone
-  // update overall text with number
-  // show range (first in debug, then in range at bottom left)
+  var overall = calculatePercentile(
+    calculateGain(sessionData),
+    calculateGains(sessions)
+  );
+  overall += _.random(-3, +3); // add some jitter to ranking
+  overall = Math.max(overall, 1);
+  overall = Math.min(overall, 99);
+  $('#overall-number').text(formatPercentage(overall));
   $('#spo2-number').text(curSpo2);
   $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
   $('#latest-data-time')
