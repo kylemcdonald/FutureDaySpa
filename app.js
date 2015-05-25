@@ -110,7 +110,7 @@ app.get('/print', function(req, res) {
 		var zoomFactor = imageSize[0] / baseSize[0];
 		var options = 
 		{
-			timeout: 30 * 1000,
+			timeout: 60 * 1000,
 			takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,
 			windowSize: {
@@ -118,7 +118,7 @@ app.get('/print', function(req, res) {
 				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
-		var url = 'http://localhost:8000/?cameraId=' + cameraId + '&screenshot=' + screenshot;
+		var url = 'http://localhost:8000/client.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
 		console.log('webshot');
 		console.log('\tfrom: ' + url);
 		console.log('\tto: ' + filename);

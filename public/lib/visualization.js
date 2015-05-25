@@ -1,9 +1,12 @@
 // might need to use this to trigger phantomjs
 function doneRendering() {
-  setTimeout(function() {
-    window.callPhantom && window.callPhantom('takeShot');
-  }, 500);
+  window.callPhantom && window.callPhantom('takeShot');
 }
+
+// var spinner = '|/-\\'; var i = 0; setInterval(function() {
+//   document.body.innerText = spinner[i % spinner.length];
+//   i++;
+// }, 100);
 
 function cycleCrosshairsLabel() {
   var label = d3.select('#crosshairs-label');
@@ -140,26 +143,60 @@ peer.on('error', function(err){
   startObsessing();
 });
 
-var hrData;
+var sessions = [];
+var sessionData = {};
+function uploadSessionData() {
+  console.log('uploading session data');
+  console.log(sessionData);
+  $.post(
+    config.remote + '/add/session',
+    sessionData);
+}
+
+function updateHrVisuals(data) {
+  $('#record-count').text(sessions.length + ' sessions');
+  var curSpo2 = sessionData.end.spo2;
+  var curHr = sessionData.end.hr;
+  $('#spo2-number').text(curSpo2);
+  $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
+}
+
 function updateHrData() {
-  console.log('Updating records from database');
-  $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+config.curSerial, function (data) {
-    hrData = data;
-    $('#record-count').text(data.length + ' records');
+  console.log('updating records from database');
+  var url = config.remote + '/get/data';
+  $('#records-link').attr('href', url);
+  $.getJSON(url, {
+      serial: config.curSerial,
+      limit: 2
+    }, function (data) {
+      sessionData = {
+        serial: config.curSerial,
+        begin: data[0],
+        end: data[1]
+      }
+      console.log('updated sessionData');
+      console.log(sessionData);
+      var url = config.remote + '/get/sessions';
+      $.getJSON(url, {
+        serial: config.curSerial
+      }, function(data) {
+        sessions = data;
+        if(sessions.length) {
+          updateHrVisuals();
+        }
+      });
   })
 }
 
-var dataSocket = io.connect('http://qualcomm-lucymcrae.herokuapp.com/');
+var dataSocket = io.connect(config.remote);
 dataSocket.on('status', function (data) {
   console.log(data);
   dataSocket.emit('status', { client: location.href });
 });
 dataSocket.on('update', function (data) {
-  console.log('Got heart rate update');
-  console.log(data);
-  $('#spo2-number').text(data.spo2);
-  $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
   if(data.serial == config.curSerial) {
+    console.log('Heart rate update');
+    console.log(data);
     updateHrData();
   }
 });
@@ -184,6 +221,7 @@ $(function() {
 	doneRendering();
 
 	$('#debug-info').click(function() {
+    uploadSessionData();
 		$.get('/print', { cameraId: config.cameraId });
 		d3.select('#debug-info')
 		  .style('opacity', 1)

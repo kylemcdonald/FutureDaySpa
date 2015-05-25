@@ -1,9 +1,10 @@
 var config = {
 	serials: {
-		// '0': '501860402', // with kyle
-		'1': '501860400', // on site
-		'2': '501860403' // on site
+		'0': '501860402', // with kyle
+		// '1': '501860400',
+		// '2': '501860403'
 	},
+	remote: 'http://qualcomm-lucymcrae.herokuapp.com',
 	peerjsApiKey: '8qwdecpywmkuik9',
 	screenshotTimeout: (2 * 60 * 1000), // every 2 minutes
 	screenshotInitial: (5 * 1000), // 5 seconds after startup
