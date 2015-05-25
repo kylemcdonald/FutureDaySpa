@@ -91,10 +91,19 @@ a {
   left: 1057px;
   top: 584px;
 }
+.dial-label {
+  font-size: 13px;
+}
+.dial-text {
+  font-family: 'Akzidenz Grotesk BQ';
+  font-weight: 300;
+  font-size: 12px;
+}
 #spo2-arc {
   position: absolute;
   left: 1065.5px;
   top: 592px;
+  -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 #spo2-arc path {
@@ -103,10 +112,23 @@ a {
 #spo2-arc circle {
   fill: #E3BFCF;
 }
+#spo2-label {
+  position: absolute;
+  left: 1104;
+  top: 667;
+}
+#spo2-text {
+  position: absolute;
+  left: 1084px;
+  top: 618px;
+  width: 30px;
+  text-align: center;
+}
 #overall-arc {
   position: absolute;
   left: 1167.5px;
   top: 592px;
+  -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 #overall-arc path {
@@ -115,17 +137,10 @@ a {
 #overall-arc circle {
   fill: #79D0E5;
 }
-.dial-text {
-  font-family: 'Akzidenz Grotesk BQ';
-  font-weight: 300;
-  font-size: 12px;
-}
-#spo2-text {
+#overall-label {
   position: absolute;
-  left: 1084px;
-  top: 618px;
-  width: 30px;
-  text-align: center;
+  left: 1205;
+  top: 667;
 }
 #overall-text {
   position: absolute;

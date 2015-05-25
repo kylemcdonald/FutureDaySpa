@@ -209,8 +209,9 @@ function formatPercentage(x) {
 
 function updateHrVisuals() {
   // show range (first in debug, then in range at bottom left)
-  var curSpo2 = sessionData.end.spo2;
-  var curHr = sessionData.end.hr;
+  var spo2 = sessionData.end.spo2;
+  dialSpo2.setPercent(Math.pow(spo2 / 100, 5));
+  var hr = sessionData.end.hr;
   var overall = calculatePercentile(
     calculateGain(sessionData),
     calculateGains(sessions)
@@ -218,9 +219,10 @@ function updateHrVisuals() {
   overall += _.random(-3, +3); // add some jitter to ranking
   overall = Math.max(overall, 1);
   overall = Math.min(overall, 99);
+  dialOverall.setPercent(overall / 100);
   $('#overall-number').text(formatPercentage(overall));
-  $('#spo2-number').text(curSpo2);
-  $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
+  $('#spo2-number').text(spo2);
+  $('#latest-data').text(hr + ' bpm / ' + spo2 + '%');
   $('#latest-data-time')
     .attr('title', sessionData.end.time + 'Z')
     .timeago();

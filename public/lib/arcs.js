@@ -1,13 +1,10 @@
-var width = 65,
-  height = 65,
-  tau = 2 * Math.PI;
-
-var radius = 25;
+var tau = 2 * Math.PI;
+var arcRadius = 25;
 var arcWidth = 7;
 
 var arc = d3.svg.arc()
-    .innerRadius(radius - arcWidth)
-    .outerRadius(radius + arcWidth)
+    .innerRadius(arcRadius - arcWidth)
+    .outerRadius(arcRadius + arcWidth)
     .startAngle(0)
 
 function setAngle(arc, arcPath, circle, newAngle, duration) {
@@ -26,18 +23,21 @@ function setAngle(arc, arcPath, circle, newAngle, duration) {
     .duration(duration)
     .attrTween('cx', function(d) {
       return function(t) {
-        return Math.cos(interpolate(t)+offset) * radius;
+        return Math.cos(interpolate(t)+offset) * arcRadius;
       }
     })
     .attrTween('cy', function(d) {
       return function(t) {
-        return Math.sin(interpolate(t)+offset) * radius;
+        return Math.sin(interpolate(t)+offset) * arcRadius;
       }
     })
     .ease('cubic-out')
 }
 
 function createDial(svg) {
+  var width = 65,
+    height = 65;
+
   var group = svg
     .attr('width', width)
     .attr('height', height)
@@ -56,16 +56,16 @@ function createDial(svg) {
       .attr('r', arcWidth);
 
   var dial = {
-    setAngle: function(angle, duration) {
-      setAngle(arc, arcPath, circle, angle, duration);
+    setPercent: function(percent, duration) {
+      duration = duration || 1000;
+      setAngle(arc, arcPath, circle, tau * percent, duration);
       return dial;
     }
   };
+  dial.setPercent(0,0);
   return dial;
 }
 
-var dialSpo2 = createDial(d3.select('#spo2-arc'))
-  .setAngle(tau * 3/4, 4000)
+var dialSpo2 = createDial(d3.select('#spo2-arc'));
 
-var dialOverall = createDial(d3.select('#overall-arc'))
-  .setAngle(tau * 1/2, 5000)
+var dialOverall = createDial(d3.select('#overall-arc'));

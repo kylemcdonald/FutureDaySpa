@@ -4,18 +4,9 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="198.026px" height="113.25px" viewBox="0 0 198.026 113.25" enable-background="new 0 0 198.026 113.25"
 	 xml:space="preserve">
-<g>
-	<text transform="matrix(1 0 0 1 149.8085 94.2389)" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">%</text>
-	<text transform="matrix(1 0 0 1 161.2535 94.2389)" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">Overall</text>
-</g>
 <circle opacity="0.54" fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" enable-background="new    " cx="41.055" cy="41.055" r="39.598"/>
 <path fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" d="M64.955,50.612"/>
 <circle opacity="0.54" fill="none" stroke="#FFFFFF" stroke-width="2.9137" stroke-miterlimit="10" enable-background="new    " cx="143.561" cy="41.055" r="39.598"/>
-<g>
-	<text transform="matrix(1 0 0 1 46.4812 94.4039)" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">%</text>
-	<text transform="matrix(1 0 0 1 57.6932 94.4039)" fill="#FFFFFF" font-family="'Apercu'" font-size="11.6549">SPO</text>
-	<text transform="matrix(1 0 0 1 79.1962 94.4039)" fill="#FFFFFF" font-family="'MyriadPro-Regular'" font-size="11.6549">₂</text>
-</g>
 <line fill="none" stroke="#FFFFFF" stroke-width="0.8861" stroke-miterlimit="10" x1="41.055" y1="113.25" x2="41.055" y2="59.197"/>
 <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="25.7725" y1="520.4433" x2="21.4652" y2="520.4433" gradientTransform="matrix(-1 0 0 1 169.2485 -461.456)">
 	<stop  offset="0" style="stop-color:#FFFFFF"/>
