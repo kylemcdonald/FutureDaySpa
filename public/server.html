@@ -168,6 +168,10 @@ peer.on('error', function(err){
 
 function makeCall(clientId) {
   console.log('makeCall ' + clientId);
+  if(peer.disconnected) {
+    console.log('got disconnected, reconnecting');
+    peer.reconnect();
+  }
   if(window.existingCall && window.existingCall.peer == clientId) {
     console.log('already on a call with ' + clientId + ', ignoring.');
     return;

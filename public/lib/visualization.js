@@ -92,7 +92,12 @@ function cycleMono() {
   setTimeout(cycleMono, 1000);
 }
 
-function startObsessing () {
+function startObsessing (event) {
+  console.log('startObsessing');
+  if(event) {
+    console.log('due to:');
+    console.log(event);
+  }
   hangUp();
   leaveVoicemail();
 }
@@ -109,6 +114,10 @@ function hangUp() {
 function leaveVoicemail() {
   if(window.existingCall) {
     return;
+  }
+  if(peer.disconnected) {
+    console.log('got disconnected, reconnecting');
+    peer.reconnect();
   }
   if(peer.id) {
     var query = {
@@ -143,9 +152,12 @@ peer.on('call', function(call){
   call.on('close', startObsessing);
   call.on('error', startObsessing);
 });
+// this is handled by 'error'
+// peer.on('disconnected', function(err){
+//   startObsessing(err);
+// });
 peer.on('error', function(err){
-  console.log(err);
-  startObsessing();
+  startObsessing(err);
 });
 
 var sessions = [];
@@ -161,6 +173,11 @@ function uploadSessionData() {
 function updateHrVisuals(data) {
   var curSpo2 = sessionData.end.spo2;
   var curHr = sessionData.end.hr;
+  // calculate gains for self
+  // calculate gains for everyone
+  // find percentile of self relative to everyone
+  // update overall text with number
+  // show range (first in debug, then in range at bottom left)
   $('#spo2-number').text(curSpo2);
   $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
   $('#latest-data-time')
