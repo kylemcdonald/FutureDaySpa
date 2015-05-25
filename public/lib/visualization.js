@@ -163,6 +163,9 @@ function updateHrVisuals(data) {
   var curHr = sessionData.end.hr;
   $('#spo2-number').text(curSpo2);
   $('#latest-data').text(curHr + ' bpm / ' + curSpo2 + '%');
+  $('#latest-data-time')
+    .attr('title', sessionData.end.time + 'Z')
+    .timeago();
   $('#record-count').text(sessions.length + ' sessions');  
   doneRendering();
 }
