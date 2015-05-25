@@ -20,12 +20,12 @@ io.on('connection', function (socket) {
 	socket.on('status', function (data) {
 		console.log(data);
 	});
-
-	app.get('/voicemail', function(req, res) {
-		io.sockets.emit('voicemail', req.query);
-		res.sendStatus(200);
-	})
 });
+
+app.get('/voicemail', function(req, res) {
+	io.sockets.emit('voicemail', req.query);
+	res.sendStatus(200);
+})
 
 app.post('/screenshot/upload', function(req, res) {
 	console.log('/screentshot/upload');

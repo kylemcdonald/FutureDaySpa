@@ -224,7 +224,7 @@ function updateHrVisuals() {
   $('#spo2-number').text(spo2);
   $('#latest-data').text(hr + ' bpm / ' + spo2 + '%');
   $('#latest-data-time')
-    .attr('title', sessionData.end.time + 'Z')
+    .attr('title', sessionData.end.time)
     .timeago();
   $('#record-count').text(sessions.length + ' sessions');  
   doneRendering();
@@ -289,7 +289,11 @@ $(function() {
 
 	$('#debug-info').click(function() {
     uploadSessionData();
-		$.get('/print', { cameraId: config.cameraId });
+		$.get('/print', {
+      cameraId: config.cameraId,
+      begin: sessionData.begin.time,
+      end: sessionData.end.time
+    });
 		d3.select('#debug-info')
 		  .style('opacity', 1)
 		  .transition()
