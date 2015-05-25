@@ -1,5 +1,5 @@
-var width = 400,
-  height = 400,
+var width = 65,
+  height = 65,
   tau = 2 * Math.PI;
 
 var radius = 25;
@@ -10,19 +10,20 @@ var arc = d3.svg.arc()
     .outerRadius(radius + arcWidth)
     .startAngle(0)
 
-function setAngle(arc, arcPath, circle, newAngle) {
+function setAngle(arc, arcPath, circle, newAngle, duration) {
   var offset = -tau / 4;
   var interpolate = d3.interpolate(arcPath.datum().endAngle, newAngle);
   arcPath.transition()
-    .duration(2000)
+    .duration(duration)
     .attrTween('d', function(d) {
       return function(t) {
         d.endAngle = interpolate(t);
         return arc(d);
       }
     })
+    .ease('cubic-out')
   circle.transition()
-    .duration(2000)
+    .duration(duration)
     .attrTween('cx', function(d) {
       return function(t) {
         return Math.cos(interpolate(t)+offset) * radius;
@@ -33,6 +34,7 @@ function setAngle(arc, arcPath, circle, newAngle) {
         return Math.sin(interpolate(t)+offset) * radius;
       }
     })
+    .ease('cubic-out')
 }
 
 function createDial(svg) {
@@ -41,24 +43,29 @@ function createDial(svg) {
     .attr('height', height)
   .append('g')
     .attr('transform',
-      'translate(' + width / 2 + ',' + height / 2 + ') '//);
-      + 'rotate(180)');
+      // 'rotate(180)' +
+      'translate(' + width / 2 + ',' + height / 2 + ') ');
+      // + 'rotate(180)');
 
   var arcPath = group.append('path')
-      .attr('fill', 'url(#gradient)')
       .attr('opacity', '.80')
       .datum({endAngle: 0})
       .attr('d', arc);
-      
+
   var circle = group.append('circle')
       .attr('r', arcWidth);
 
-  return {
-    setAngle: function(angle) {
-      setAngle(arc, arcPath, circle, angle);
+  var dial = {
+    setAngle: function(angle, duration) {
+      setAngle(arc, arcPath, circle, angle, duration);
+      return dial;
     }
   };
+  return dial;
 }
 
-var dialSpo2 = createDial(d3.select('#spo2-arc'));
-dialSpo2.setAngle(tau * 3/4);
+var dialSpo2 = createDial(d3.select('#spo2-arc'))
+  .setAngle(tau * 3/4, 4000)
+
+var dialOverall = createDial(d3.select('#overall-arc'))
+  .setAngle(tau * 1/2, 5000)

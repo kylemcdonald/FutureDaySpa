@@ -59,12 +59,31 @@
 <svg id="graph"></svg>
 <img id="graph-scale" src="assets/graph.svg"/>
 <img id="dials" src="assets/dials.svg"/>
+
+<svg id="spo2-arc">
+<defs>
+    <linearGradient id="spo2-gradient">
+        <stop offset="0%" stop-color="#ecd9e9"/>
+        <stop offset="100%"  stop-color="#836f80"/>
+    </linearGradient>
+</defs>
+</svg>
 <div id="spo2-text" class="dial-text precise">
   <span id="spo2-number">98</span><span class="percent">%</span>
 </div>
+
+<svg id="overall-arc">
+<defs>
+    <linearGradient id="overall-gradient">
+        <stop offset="0%" stop-color="rgb(131, 204, 234)"/>
+        <stop offset="100%" stop-color="rgb(30, 100, 132)"/>
+    </linearGradient>
+</defs>
+</svg>
 <div id="overall-text" class="dial-text precise">
   <span id="overall-number">30</span><span class="percent">%</span>
 </div>
+
 <div id="crosshairs">
   <img src="assets/crosshairs.svg"/>
   <div id="crosshairs-text">
@@ -90,5 +109,6 @@
 </div>
 
 <script src="lib/graph.js"></script>
+<script src="lib/arcs.js"></script>
 </body>
 </html>

@@ -91,6 +91,30 @@ a {
   left: 1057px;
   top: 584px;
 }
+#spo2-arc {
+  position: absolute;
+  left: 1065.5px;
+  top: 592px;
+  transform: rotate(180deg);
+}
+#spo2-arc path {
+  fill: url(#spo2-gradient);
+}
+#spo2-arc circle {
+  fill: #E3BFCF;
+}
+#overall-arc {
+  position: absolute;
+  left: 1167.5px;
+  top: 592px;
+  transform: rotate(180deg);
+}
+#overall-arc path {
+  fill: url(#overall-gradient);
+}
+#overall-arc circle {
+  fill: #79D0E5;
+}
 .dial-text {
   font-family: 'Akzidenz Grotesk BQ';
   font-weight: 300;
