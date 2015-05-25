@@ -1,8 +1,8 @@
 var config = {
 	serials: {
-		'0': '501860402', // with kyle
-		// '1': '501860400', // on site
-		// '2': '501860403' // on site
+		// '0': '501860402', // with kyle
+		'1': '501860400', // on site
+		'2': '501860403' // on site
 	},
 	peerjsApiKey: '8qwdecpywmkuik9',
 	screenshotTimeout: (2 * 60 * 1000), // every 2 minutes

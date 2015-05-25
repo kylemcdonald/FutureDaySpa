@@ -157,6 +157,7 @@ dataSocket.on('status', function (data) {
 dataSocket.on('update', function (data) {
   console.log('Got heart rate update');
   console.log(data);
+  $('#spo2-number').text(data.spo2);
   $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
   if(data.serial == config.curSerial) {
     updateHrData();
