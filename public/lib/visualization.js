@@ -152,22 +152,46 @@ peer.on('call', function(call){
   call.on('close', startObsessing);
   call.on('error', startObsessing);
 });
-// this is handled by 'error'
-// peer.on('disconnected', function(err){
-//   startObsessing(err);
-// });
+peer.on('disconnected', function(err){
+  console.log('disconnected from peer:');
+  console.log(err);
+  // this is handled by 'error' (i think)
+  // startObsessing(err);
+});
 peer.on('error', function(err){
   startObsessing(err);
 });
+
+function postJSON(url, data) {
+  $.ajax({
+    contentType: 'application/json',
+    url: url,
+    type: 'POST',
+    data: JSON.stringify(data)
+  });
+}
 
 var sessions = [];
 var sessionData = {};
 function uploadSessionData() {
   console.log('uploading session data:');
   console.log(sessionData);
-  $.post(
+  postJSON(
     config.remote + '/add/session',
     sessionData);
+}
+
+// ratio between begin and end hr
+// if begin hr = 80, end hr = 50
+// gain is 1.6x
+function calculateGain(data) {
+  return (data.begin.hr / data.end.hr);
+}
+
+function calculateGains(sessions) {
+  return sessions.map(function(session) {
+    return calculateGain(session);
+  })
 }
 
 function updateHrVisuals(data) {
