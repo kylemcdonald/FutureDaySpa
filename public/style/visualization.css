@@ -77,6 +77,11 @@ body {
   left: 28px;
   top: 524px;
 }
+#graph-scale {
+  position: absolute;
+  left: 28px;
+  top: 524px;  
+}
 #dials {
   position: absolute;
   left: 1057px;

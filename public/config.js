@@ -1,7 +1,8 @@
 var config = {
 	serials: {
-		'0': '501860402',
-		'1': '000000000'
+		'0': '501860402', // with kyle
+		// '1': '501860400', // on site
+		// '2': '501860403' // on site
 	},
 	peerjsApiKey: '8qwdecpywmkuik9',
 	screenshotTimeout: (2 * 60 * 1000), // every 2 minutes
@@ -21,6 +22,14 @@ var config = {
 	debugBody: {
 		maxLength: 140,
 		cycle: { min: 30, max: 1000 },
+	},
+	graphBars: {
+		duration: { min: 200, max: 800 },
+		delay: 400,
+		count: 33,
+		dataRange: { min: 10, max: 100 },
+		colorWidth: 4,
+		colors: ['#AD8BB8', '#A7CAE1', '#E398B9', '#B0BBC6']
 	}
 };
 config.cameraId = Arg('cameraId') || 0;
