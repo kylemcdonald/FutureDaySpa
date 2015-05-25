@@ -18,12 +18,7 @@ sudo npm install -g forever
 forever app.js
 ```
 
-On the main computer (presumably `futuredayspa.local`), open up two Chrome tabs with the following URLs:
-
-```
-http://localhost:8000/server.html?cameraId=1
-http://localhost:8000/server.html?cameraId=2
-```
+On the main computer, open up Chrome and navigate to `http://localhost:8000/`. Then cmd+click on `Server 1` and `Server 2` to open new tabs for two streams.
 
 The numbers `1` and `2` may be different on a different machine. They could even change if you switch USB ports and restart Chrome. But if you keep things plugged in the same way they should be the same even if you restart Chrome or the computer.
 
@@ -33,16 +28,7 @@ Make sure to click "Allow" for the camera permissions. Alternatively, you can op
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://localhost:8000/server.html?cameraId=0" --use-fake-ui-for-media-stream
 ```
 
-Then on the tablets that are used for visualization, open the corresponding pages:
-
-```
-http://futuredayspa.local:8000/?cameraId=1
-http://futuredayspa.local:8000/?cameraId=2
-```
-
-Where `cameraId` corresponds to which camera the tablet is beneath.
-
-If `futuredayspa.local` does not resolve, you may need to assign a static IP to the main computer and use the IP address instead.
+Then on the tablets that are used for visualization, open `http://futuredayspa.local:8000/` or use the static IP of the server. Then click on `Client 1` or `Client 2` depending on which camera the tablet is beneath.
 
 The tablets will then show the video stream after a delay of, at most, a few seconds. Swipe up in the middle of the screen to make the address bar disappear.
 

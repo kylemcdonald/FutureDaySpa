@@ -123,28 +123,22 @@ var peer = new Peer({ key: config.peerjsApiKey });
 
 // Receiving a call
 peer.on('call', function(call){
-  // Answer the call automatically (instead of prompting user) for demo purposes
-  // call.answer(window.localStream);
-  call.answer();
-  step3(call);
-});
-peer.on('error', function(err){
-  startObsessing();
-});
-
-function step3 (call) {
   hangUp();
+  call.answer();
+  window.existingCall = call;
 
-  // Wait for stream on the call, then set peer video display
+  // Wait for stream, then set peer video display
   call.on('stream', function(stream){
     $('#their-video').prop('src', URL.createObjectURL(stream));
   });
 
-  // UI stuff
-  window.existingCall = call;
-  $('#their-id').text(call.peer);
   call.on('close', startObsessing);
-}
+  call.on('error', startObsessing);
+});
+peer.on('error', function(err){
+  console.log(err);
+  startObsessing();
+});
 
 var hrData;
 function updateHrData() {

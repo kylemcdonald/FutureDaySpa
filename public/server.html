@@ -99,10 +99,10 @@ function saveScreenshot() {
             var req = new XMLHttpRequest();
             req.open('POST', 'screenshot/upload?cameraId='+config.cameraId, true);
             req.onload = function (event) {
-              console.log('Uploaded blob successfully:');
+              console.log('Uploaded screenshot successfully:');
               console.log(event);
             };
-            console.log('Uploading blob:');
+            console.log('Uploading screenshot:');
             console.log(blob);
             req.send(blob);
         },
@@ -167,13 +167,18 @@ peer.on('error', function(err){
 });
 
 function makeCall(clientId) {
-  if(window.existingCall) {
-    console.log('Already on a call, ignoring.');
+  console.log('makeCall ' + clientId);
+  if(window.existingCall && window.existingCall.peer == clientId) {
+    console.log('already on a call with ' + clientId + ', ignoring.');
     return;
+  } else {
+    hangUp();
   }
-  $('#callto-id').val(clientId);
+  if(window.localStream) {
+    $('#callto-id').val(clientId);
     var call = peer.call(clientId, window.localStream);
     step3(call);
+  }
 }
 
 // Click handlers setup
@@ -219,8 +224,6 @@ function step2 () {
 }
 
 function step3 (call) {
-  hangUp();
-
   // UI stuff
   window.existingCall = call;
   $('#their-id').text(call.peer);
