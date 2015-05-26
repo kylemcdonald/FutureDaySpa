@@ -27,6 +27,7 @@ app.get('/voicemail', function(req, res) {
 	res.sendStatus(200);
 })
 
+var manualPhotos = {};
 app.post('/screenshot/upload', function(req, res) {
 	console.log('/screentshot/upload');
 	console.log(req.query);
@@ -37,11 +38,17 @@ app.post('/screenshot/upload', function(req, res) {
 	    	console.error(err);
 	    	return;
 	    }
-		var filename = dir + (new Date()) + '.jpg';
-		console.log('saving screenshot to: ' + filename);
-		fs.writeFile(filename, req.body, 'binary', function(err) {
+	    var timestamp = Math.floor((new Date() / 1000));
+		var filename = (req.query.manual ? 'manual-' : 'auto-') + timestamp + '.jpg';
+		var path = dir + filename;
+		console.log('saving screenshot to: ' + path);
+		fs.writeFile(path, req.body, 'binary', function(err) {
 			if(err) console.log(err);
 			else console.log('saved screenshot');
+			if(req.query.manual) {
+				console.log('manually triggered');
+				manualPhotos[cameraId] = filename;
+			}
 		});
 	});
 	res.sendStatus(200);
@@ -70,6 +77,25 @@ function getClosestScreenshot(cameraId, date) {
 	return bestFile;
 }
 
+function getScreenshot(cameraId) {
+	if(manualPhotos[cameraId]) {
+		var screenshot = manualPhotos[cameraId];
+		manualPhotos[cameraId] = null;
+		console.log('using manual screenshot');
+		return screenshot;
+	} else {
+		console.log('using automatic screenshot');
+		var recently = (new Date()) - (config.screenshotRewindMinutes * 60 * 1000);
+		return getClosestScreenshot(cameraId, recently);		
+	}
+}
+
+app.get('/screenshot/request', function(req, res) {
+	console.log('sending screenshot request');
+	io.sockets.emit('screenshot', req.query);	
+	res.sendStatus(200);
+})
+
 app.get('/screenshot/recent', function(req, res) {
 	var cameraId = req.query.cameraId;
 	var dir = 'public/screenshots/' + cameraId + '/';
@@ -92,8 +118,7 @@ app.get('/print', function(req, res) {
 	console.log('/print');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
-	var recently = (new Date()) - (config.screenshotRewindMinutes * 60 * 1000);
-	var screenshot = getClosestScreenshot(cameraId, recently);
+	var screenshot = getScreenshot(cameraId);
 	var dir = 'public/prints/' + cameraId + '/';
 	var filename = dir + (new Date()) + '.png';
 	mkdirp(dir, function (err) {
@@ -110,6 +135,7 @@ app.get('/print', function(req, res) {
 		var zoomFactor = imageSize[0] / baseSize[0];
 		var options = 
 		{
+			phantomPath: '/usr/local/bin/phantomjs',
 			timeout: 60 * 1000,
 			takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,
@@ -126,7 +152,6 @@ app.get('/print', function(req, res) {
 		webshot(url, filename, options, function (err) {
 		    if (err) {
 		    	console.error(err);
-		    	// could try hitting /print again here?
 		    	return;
 		    }
 		    console.log('saved webshot');

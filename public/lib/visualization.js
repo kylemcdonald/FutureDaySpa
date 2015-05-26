@@ -309,7 +309,8 @@ function updateHrVisuals() {
     .attr('title', sessionData.end.time)
     .timeago();
   $('#record-count').text(sessions.length + ' sessions');  
-  doneRendering();
+  
+  setTimeout(doneRendering(), 500);
 }
 
 function updateHrData() {
@@ -371,6 +372,21 @@ $(function() {
 	cycleMono();
 
   updateHrData();
+
+  $('#dial-area').click(function() {
+    $.get('/screenshot/request', {
+      cameraId: config.cameraId
+    });
+    d3.select('#dial-area')
+      .style('opacity', 1)
+      .transition()
+      .duration(500)
+      .style('opacity', 0)
+      .transition()
+      .duration(500)
+      .style('visibility', 'visible')
+      .style('opacity', 1)
+  })
 
 	$('#debug-info').click(function() {
     uploadSessionData();

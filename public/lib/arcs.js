@@ -43,9 +43,7 @@ function createDial(svg) {
     .attr('height', height)
   .append('g')
     .attr('transform',
-      // 'rotate(180)' +
       'translate(' + width / 2 + ',' + height / 2 + ') ');
-      // + 'rotate(180)');
 
   var arcPath = group.append('path')
       .attr('opacity', '.80')
@@ -58,6 +56,9 @@ function createDial(svg) {
   var dial = {
     setPercent: function(percent, duration) {
       duration = duration || 1000;
+      if(arcPath.datum().endAngle == 0) {
+        duration = 0;
+      }
       setAngle(arc, arcPath, circle, tau * percent, duration);
       return dial;
     }

@@ -86,6 +86,9 @@ a {
   left: 28px;
   top: 524px;  
 }
+#dial-area {
+  cursor: hand;
+}
 #dials {
   position: absolute;
   left: 1057px;

@@ -82,7 +82,7 @@ body {
 <script>
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-function saveScreenshot() {
+function saveScreenshot(manual) {
   var v = document.getElementById('my-video');
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
@@ -97,7 +97,7 @@ function saveScreenshot() {
   canvas.toBlob(
         function (blob) {
             var req = new XMLHttpRequest();
-            req.open('POST', 'screenshot/upload?cameraId='+config.cameraId, true);
+            req.open('POST', 'screenshot/upload?cameraId='+config.cameraId + (manual ? '&manual=true' : ''), true);
             req.onload = function (event) {
               console.log('Uploaded screenshot successfully:');
               console.log(event);
@@ -242,10 +242,17 @@ voicemailSocket.on('status', function (data) {
   voicemailSocket.emit('status', { client: location.href });
 });
 voicemailSocket.on('voicemail', function (data) {
-  console.log('Got voicemail:');
-  console.log(data);
   if(data.cameraId == config.cameraId) {
+    console.log('Got voicemail:');
+    console.log(data);
     makeCall(data.clientId);
+  }
+});
+voicemailSocket.on('screenshot', function (data) {
+  if(data.cameraId == config.cameraId) {
+    console.log('got a screenshot request:');
+    console.log(data);
+    saveScreenshot(true);
   }
 });
 
@@ -261,7 +268,9 @@ dataSocket.on('update', function (data) {
   $('#latest-data').text(data.hr + ' bpm / ' + data.spo2 + '%');
   if(data.serial == config.curSerial) {
     console.log('Updating records from database');
-    $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/?serial='+config.curSerial, function (data) {
+    $.getJSON('http://qualcomm-lucymcrae.herokuapp.com/get/data/', {
+        serial: config.curSerial
+      }, function (data) {
       hrData = data;
     })
   }
