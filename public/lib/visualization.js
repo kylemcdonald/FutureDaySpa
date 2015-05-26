@@ -267,7 +267,17 @@ function formatPercentage(x) {
 }
 
 function updateHrVisuals() {
-  // show range (first in debug, then in range at bottom left)
+  var left = sessionData.end.hr;
+  var right = sessionData.begin.hr;
+  right = Math.max(left + 1, right);
+  zoomToRange(left, right, .5, 1000);
+
+  var offset = $('#axes').offset().left - ($('#hr-circle-after').width() / 2);
+  d3.select('#hr-circle-after')
+    .style('left', xScale(left) + offset);
+  d3.select('#hr-circle-before')
+    .style('left', xScale(right) + offset);
+
   var spo2 = sessionData.end.spo2;
   dialSpo2.setPercent(Math.pow(spo2 / 100, 5));
   var hr = sessionData.end.hr;
@@ -303,6 +313,7 @@ function updateHrData() {
         end: data[1]
       }
       // assume that sessions always go well.
+      // (this will be false at the end of a session)
       sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
       console.log('updated sessionData:');
       console.log(sessionData);

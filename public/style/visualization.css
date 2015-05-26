@@ -81,10 +81,10 @@ a {
   left: 28px;
   top: 524px;
 }
-#graph-scale {
+#axes {
   position: absolute;
   left: 28px;
-  top: 524px;  
+  top: 667px;  
 }
 #dial-area {
   cursor: hand;
@@ -226,6 +226,15 @@ a {
   opacity: 0;
 }
 
+#hr-circle-before {
+  position: absolute;
+  top: 585px;
+}
+#hr-circle-after {
+  position: absolute;
+  top: 585px;
+}
+
 .x.axis {
   fill: white;
 }
@@ -241,4 +250,5 @@ a {
   font-family: 'Apercu';
   font-size: 12px;
   opacity: .80;
+  text-anchor: start !important;
 }

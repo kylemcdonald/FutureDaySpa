@@ -2,7 +2,7 @@
 <head>
 <title>Future Day Spa</title>
 <link rel='stylesheet' href='style/pure.css'>
-<link rel='stylesheet' href='style/visualization.css'>
+<!-- <link rel='stylesheet' href='style/visualization.css'> -->
 <script src='http://cdn.peerjs.com/0.3/peer.js'></script>
 <script src='/socket.io/socket.io.js'></script>
 
@@ -16,9 +16,16 @@
 
 <body>
 
-<svg id='axes'></svg>
+<svg id='axes' style='left: 0px; top: 0px'></svg>
 
 <script src='lib/axes.js'></script>
+<script>
+zoomToRange(50, 80, .5, 1000);
+setTimeout(
+  function() {
+    zoomToRange(80, 100, .5, 1000);
+  }, 1000);
+</script>
 
 </body>
 </html>
