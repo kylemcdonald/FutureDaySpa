@@ -3,13 +3,6 @@ function doneRendering() {
   window.callPhantom && window.callPhantom('takeShot');
 }
 
-var timeouts 
-function draw() {
-  requestAnimationFrame(draw);
-  console.log('draw');
-}
-draw();
-
 function randomHex(width) {
   var str = '';
   for(var i = 0; i < width; i++) {
