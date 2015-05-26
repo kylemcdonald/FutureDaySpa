@@ -288,7 +288,9 @@ function getOverallPercentile() {
 }
 
 function setRange(begin, end) {
-  var offset = $('#axes').offset().left - ($('#hr-circle-after').width() / 2);
+  // var circleWidth = $('#hr-circle-after').width();
+  var circleWidth = 82;
+  var offset = $('#axes').offset().left - (circleWidth / 2);
   if(begin && end) {
     // zoom to begin/end range
     var left = end, right = begin;
