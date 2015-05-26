@@ -286,8 +286,8 @@ function updateHrVisuals() {
     .attr('title', sessionData.end.time)
     .timeago();
   $('#record-count').text(sessions.length + ' sessions');  
-  
-  setTimeout(doneRendering(), 500);
+
+  doneRendering();
 }
 
 function updateHrData() {
@@ -343,10 +343,10 @@ $(function() {
 	}
 
   cycleTerminal();
-	cycleCrosshairsLabel();
-	cycleDebugTitle();
-	cycleDebugText();
-	cycleMono();
+  cycleCrosshairsLabel();
+  cycleDebugTitle();
+  cycleDebugText();
+  cycleMono();
 
   updateHrData();
 

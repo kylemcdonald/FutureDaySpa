@@ -12,7 +12,7 @@ var config = {
 	crosshairs: {
 		cycle: { min: 500, max: 4000 },
 		range: {
-			left: { min: 430, max: 820 },
+			left: { min: 400, max: 780 },
 			top: { min: 200, max: 430 }
 		}
 	},

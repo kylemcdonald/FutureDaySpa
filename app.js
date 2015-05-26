@@ -135,7 +135,7 @@ app.get('/print', function(req, res) {
 		var zoomFactor = imageSize[0] / baseSize[0];
 		var options = 
 		{
-			phantomPath: '/usr/local/bin/phantomjs',
+			// phantomPath: '/usr/local/bin/phantomjs',
 			timeout: 60 * 1000,
 			takeShotOnCallback: true, // might need to switch
 			zoomFactor: zoomFactor,

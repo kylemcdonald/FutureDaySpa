@@ -106,11 +106,10 @@ a {
   position: absolute;
   left: 1065.5px;
   top: 592px;
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
 }
 #spo2-arc path {
   fill: url(#spo2-gradient);
+  opacity: .80;
 }
 #spo2-arc circle {
   fill: #E3BFCF;
@@ -131,11 +130,10 @@ a {
   position: absolute;
   left: 1167.5px;
   top: 592px;
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
 }
 #overall-arc path {
   fill: url(#overall-gradient);
+  opacity: .80;
 }
 #overall-arc circle {
   fill: #79D0E5;
