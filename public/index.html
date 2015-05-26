@@ -10,7 +10,7 @@ body, html {
   color: white;
 }
 p {
-  margin: 1em;
+  margin: .4em;
 }
 </style>
 </head>
@@ -33,10 +33,36 @@ p {
   </div>
 </div>
 
-<div style="text-align: center">
-    <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/sessions" class="pure-button">View Sessions</a></p>
-    <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/data" class="pure-button">View Data</a></p>
+<div class="pure-g">
+    <div class="pure-u-1-2"  style="text-align: right">
+      <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/sessions" class="pure-button">View Sessions</a></p>
+      <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/data" class="pure-button">View Data</a></p>
+    </div>
+    <div class="pure-u-1-2 pure-form">
+        <p><input type="text" placeholder="SpO2" id="spo2-value"></p>
+        <p><input type="text" placeholder="Heart Rate" id="hr-value"></p>
+        <p><input type="text" placeholder="Serial" id="serial-value"></p>
+        <p><a href="#" class="pure-button pure-button-success" id="add-reading">Add Reading</a></p>
+    </div>
 </div>
+
+<script>
+$(function() {
+  $('#add-reading').click(function() {
+    $.get('http://qualcomm-lucymcrae.herokuapp.com/add',
+      {
+        spo2: $('#spo2-value').val(),
+        hr: $('#hr-value').val(),
+        serial: $('#serial-value').val()
+      }, function(data) {
+        console.log(data);
+        $('#spo2-value').val('');
+        $('#hr-value').val('');
+        $('#serial-value').val('');
+      })
+  })
+})
+</script>
 
 </body>
 </html>

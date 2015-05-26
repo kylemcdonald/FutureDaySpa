@@ -90,6 +90,15 @@ function getScreenshot(cameraId) {
 	}
 }
 
+app.get('/screenshot/clear', function(req, res) {
+	var cameraId = req.query.cameraId;
+	if(manualPhotos[cameraId]) {
+		console.log('clearing screenshot for ' + cameraId);
+		manualPhotos[cameraId] = null;
+	}
+	res.sendStatus(200);
+})
+
 app.get('/screenshot/request', function(req, res) {
 	console.log('sending screenshot request');
 	io.sockets.emit('screenshot', req.query);	
@@ -144,7 +153,13 @@ app.get('/print', function(req, res) {
 				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
-		var url = 'http://localhost:8000/client.html?cameraId=' + cameraId + '&screenshot=' + screenshot;
+		var url = 'http://localhost:8000/client.html' +
+			'?cameraId=' + cameraId +
+			'&screenshot=' + screenshot +
+			'&overall=' + req.query.overall +
+			'&spo2=' + req.query.spo2 +
+			'&begin=' + req.query.begin +
+			'&end=' + req.query.end;
 		console.log('webshot');
 		console.log('\tfrom: ' + url);
 		console.log('\tto: ' + filename);

@@ -1,5 +1,6 @@
 var config = {
 	serials: {
+		'-1': '-1', // debug serial
 		'0': '501860400', // on site
 		'2': '501860403' // on site
 	},
@@ -35,3 +36,12 @@ var config = {
 };
 config.cameraId = Arg('cameraId') || 0;
 config.curSerial = config.serials[config.cameraId];
+config.screenshot = Arg('screenshot');
+if(Arg('render')) {
+	config.render = {
+		overall: Arg('overall'),
+		spo2: Arg('spo2'),
+		begin: Arg('begin'),
+		end: Arg('end')
+	}
+}
