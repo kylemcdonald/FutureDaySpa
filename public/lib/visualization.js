@@ -2,11 +2,93 @@
 function doneRendering() {
   window.callPhantom && window.callPhantom('takeShot');
 }
+// 10      10100   012    $A    101     22    A
+// 11      11011   013    $B    102     23    B
+// 12      11000   014    $C    110     30    10
+// 13      11101   015    $D    111     31    11
+// 14      11110   016    $E    112     32    12
+// 15      11111   017    $F    120     33    13
+// 16      10000   020   $10    121    100    14
+// 17      10001   021   $11    122    101    15
+// 18      10010   022   $12    200    102    16
+// 19      10011   023   $13    201    103    17
+// 20      10100   024   $14    202    110    18
+// 21      10101   025   $15    210    111    19
+// 22      10110   026   $16    211    112    1A
+// 23      10111   027   $17    212    113    1B
+// 24      11000   030   $18    220    120    20
+// 25      11001   031   $19    221    121    21
+// 26      11010   032   $1A    222    122    22
+// 27      11011   033   $1B    1000   123    23
+// 28      11100   034   $1C    1001   130    24
+// 29      11101   035   $1D    1002   131    25
+// 30      11110   036   $1E    1010   132    26
 
-// var spinner = '|/-\\'; var i = 0; setInterval(function() {
-//   document.body.innerText = spinner[i % spinner.length];
-//   i++;
-// }, 100);
+function randomHex(width) {
+  var str = '';
+  for(var i = 0; i < width; i++) {
+    str += _.sample('0123456789ABCDEF');
+  }
+  return str;
+}
+
+function randomBinary(width) {
+  var str = '';
+  for(var i = 0; i < width; i++) {
+    str += _.random(0, 1);
+  }
+  return str;
+}
+
+function repeat(x, n) {
+  var str = '';
+  for(var i = 0; i < n; i++) {
+    str += x;
+  }  
+  return str;
+}
+
+function fixed(x, width, side, fill) {
+  var str = new String(x);
+  var n = width - str.length;
+  var pad = repeat(fill, n);
+  return (side ? '' : pad) + x + (side ? pad : '');
+}
+
+function generateTerminalLine() {
+  var line = [
+    fixed(_.random(10, 50), 8, true, ' '),
+    fixed(randomBinary(5), 8, true, ' '),
+    fixed(fixed(_.random(0, 99), 3, false, '0'), 6, true, ' '),
+    '$' + randomHex(2) + '     ',
+    fixed(randomBinary(4), 7, true, ' '),
+    fixed(_.random(1, 255), 7, true, ' '),
+    randomHex(2)
+  ].join('');
+  return line;
+}
+
+function cycleTerminal() {
+  var spinner = '|/-\\';
+  var i = 0;
+  setInterval(function() {
+    $('.spinner').text(spinner[i]);
+    i = (i + 1) % spinner.length;
+  }, 100);
+
+  var col = $('#mono-text-' + (Math.random() < .5 ? '0' : '1'));
+  var text = col.html();
+  text += generateTerminalLine() + '\n';
+  if(text.match(/\n/g).length > 20) {
+    text = '';
+  }
+  col.html(text);
+
+  setTimeout(cycleTerminal,
+    Math.random() < .5 ? 
+      30 :
+      _.random(100, 300));
+}
 
 function cycleCrosshairsLabel() {
   var label = d3.select('#crosshairs-label');
@@ -282,6 +364,7 @@ $(function() {
 		}
 	}
 
+  cycleTerminal();
 	cycleCrosshairsLabel();
 	cycleDebugTitle();
 	cycleDebugText();
@@ -302,8 +385,8 @@ $(function() {
 		  .transition()
 		  .style('visibility', 'hidden')
 		  .transition()
-		  .delay(10000)
-		  .duration(2000)
+		  .delay(25000)
+		  .duration(5000)
 		  .style('visibility', 'visible')
 		  .style('opacity', 1);
 	})

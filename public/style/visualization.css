@@ -58,7 +58,7 @@ a {
 #mono-column-0, #mono-column-1 {
   font-family: 'Apercu Mono';
   font-size: 6px;
-  opacity: .34;
+  height: 500px;
 }
 #mono-column-0 {
   position: absolute;
@@ -71,10 +71,10 @@ a {
   left: 320px;
 }
 .mono-body {
-  opacity: .34;  
+  opacity: .34;
 }
-#mono-final {
-  opacity: 1.;
+.mono-final {
+  opacity: 1;
 }
 #graph {
   position: absolute;

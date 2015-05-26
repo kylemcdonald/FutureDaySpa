@@ -1,7 +1,6 @@
 var config = {
 	serials: {
-		'0': '501860402', // with kyle
-		'1': '501860400', // on site
+		'0': '501860400', // on site
 		'2': '501860403' // on site
 	},
 	remote: 'http://qualcomm-lucymcrae.herokuapp.com',
