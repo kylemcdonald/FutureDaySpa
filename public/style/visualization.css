@@ -225,3 +225,20 @@ a {
   color: #ccc;
   opacity: 0;
 }
+
+.x.axis {
+  fill: white;
+}
+.x.axis line {
+  stroke: white;
+  opacity: .50;
+}
+.x.axis path {
+  display: none;
+}
+.x.axis text {
+  position: absolute;
+  font-family: 'Apercu';
+  font-size: 12px;
+  opacity: .80;
+}

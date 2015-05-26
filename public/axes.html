@@ -12,69 +12,13 @@
 <script src='http://d3js.org/d3.v3.min.js' charset='utf-8'></script>
 <script src='lib/arg-1.3.1.min.js'></script>
 
-<style>
-body {
-  font: 10px sans-serif;
-}
-.x.axis {
-  fill: white;
-}
-.x.axis line {
-  stroke: white;
-  opacity: .50;
-}
-.x.axis path {
-  display: none;
-}
-.x.axis text {
-  position: absolute;
-  font-family: 'Apercu';
-  font-size: 12px;
-  opacity: .80;
-}
-</style>
-
 </head>
 
 <body>
 
-<script>
-var width = 880, height = 30;
+<svg id='axes'></svg>
 
-var x = d3.scale.linear().range([0, width]),
-    xAxis = d3.svg.axis()
-      .scale(x)
-      .tickSize(-height)
-      .ticks(10)
-      .tickSubdivide(true);
-
-var min = 60;
-var max = 80;
-x.domain([min, max]);
-
-var svg = d3.select('body').append('svg')
-    .attr('width', width)
-    .attr('height', height);
-
-svg.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', 'translate(0,' + height + ')')
-    .call(xAxis)
-    .selectAll('text')
-      .attr('transform', 'translate(10,-25)')
-
-function zoomToRange(left, right, padding) {
-  var range = right - left;
-  left -= range * padding;
-  right += range * padding;
-  x.domain([ left, right ])
-  var t = svg.transition().duration(750)
-  t.select('.x.axis')
-    .call(xAxis)
-    .selectAll('text')
-      .attr('transform', 'translate(10,-25)')
-}
-</script>
+<script src='lib/axes.js'></script>
 
 </body>
 </html>
