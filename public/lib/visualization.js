@@ -1,6 +1,9 @@
 // might need to use this to trigger phantomjs
 function doneRendering() {
-  window.callPhantom && window.callPhantom('takeShot');
+  setTimeout(
+    function() {
+      window.callPhantom && window.callPhantom('takeShot');
+    }, 1000)
 }
 
 function randomHex(width) {
@@ -460,7 +463,7 @@ dataSocket.on('update', function (data) {
 $(function() {
   if(!Arg('debug')) {
 		if(config.screenshot) {
-			$('#background').prop('src', 'screenshots/'+config.cameraId+'/'+config.screenshot);
+			$('#background').attr('src', 'screenshots/'+config.screenshot);
 		} else {
 			startObsessing();
 		}

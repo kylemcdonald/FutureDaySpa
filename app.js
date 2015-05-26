@@ -29,7 +29,7 @@ app.get('/voicemail', function(req, res) {
 
 var manualPhotos = {};
 app.post('/screenshot/upload', function(req, res) {
-	console.log('/screentshot/upload');
+	console.log('/screenshot/upload');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
 	var dir = 'public/screenshots/' + cameraId + '/';
@@ -153,9 +153,9 @@ app.get('/print', function(req, res) {
 				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
-		var url = 'http://localhost:8000/client.html' +
-			'?cameraId=' + cameraId +
-			'&screenshot=' + screenshot +
+		var url = 'http://localhost:8000/client.html?' +
+			'&render=true' +
+			'&screenshot=' + cameraId + '/' + screenshot +
 			'&overall=' + req.query.overall +
 			'&spo2=' + req.query.spo2 +
 			'&begin=' + req.query.begin +
