@@ -1,8 +1,8 @@
 var config = {
 	serials: {
 		'-1': '-1', // debug serial
-		'0': '501860400', // on site
-		'2': '501860403' // on site
+		'0': '501860403', // on site BACK
+		'1': '501860400' // on site FRONT
 	},
 	remote: 'http://qualcomm-lucymcrae.herokuapp.com',
 	peerjsApiKey: '8qwdecpywmkuik9',
