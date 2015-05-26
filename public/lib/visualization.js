@@ -2,27 +2,13 @@
 function doneRendering() {
   window.callPhantom && window.callPhantom('takeShot');
 }
-// 10      10100   012    $A    101     22    A
-// 11      11011   013    $B    102     23    B
-// 12      11000   014    $C    110     30    10
-// 13      11101   015    $D    111     31    11
-// 14      11110   016    $E    112     32    12
-// 15      11111   017    $F    120     33    13
-// 16      10000   020   $10    121    100    14
-// 17      10001   021   $11    122    101    15
-// 18      10010   022   $12    200    102    16
-// 19      10011   023   $13    201    103    17
-// 20      10100   024   $14    202    110    18
-// 21      10101   025   $15    210    111    19
-// 22      10110   026   $16    211    112    1A
-// 23      10111   027   $17    212    113    1B
-// 24      11000   030   $18    220    120    20
-// 25      11001   031   $19    221    121    21
-// 26      11010   032   $1A    222    122    22
-// 27      11011   033   $1B    1000   123    23
-// 28      11100   034   $1C    1001   130    24
-// 29      11101   035   $1D    1002   131    25
-// 30      11110   036   $1E    1010   132    26
+
+var timeouts 
+function draw() {
+  requestAnimationFrame(draw);
+  console.log('draw');
+}
+draw();
 
 function randomHex(width) {
   var str = '';
@@ -68,13 +54,11 @@ function generateTerminalLine() {
   return line;
 }
 
+var spinner = '|/-\\';
+var spinnerIndex = 0;
 function cycleTerminal() {
-  var spinner = '|/-\\';
-  var i = 0;
-  setInterval(function() {
-    $('.spinner').text(spinner[i]);
-    i = (i + 1) % spinner.length;
-  }, 100);
+  $('.spinner').text(spinner[spinnerIndex]);
+  spinnerIndex = (spinnerIndex + 1) % spinner.length;
 
   var col = $('#mono-text-' + (Math.random() < .5 ? '0' : '1'));
   var text = col.html();
