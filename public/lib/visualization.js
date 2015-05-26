@@ -242,6 +242,8 @@ function updateHrData() {
         begin: data[0],
         end: data[1]
       }
+      // assume that sessions always go well.
+      sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
       console.log('updated sessionData:');
       console.log(sessionData);
       var url = config.remote + '/get/sessions';
