@@ -5,6 +5,8 @@
 <script src="lib/jquery.min.js"></script>
 <script src="lib/arg-1.3.1.min.js"></script>
 <script src="lib/jquery.timeago.min.js"></script>
+<script src="lib/moment.min.js"></script>
+<script src="lib/underscore-min.js"></script>
 <script src="config.js"></script>
 <style>
 body, html {
@@ -36,6 +38,42 @@ img {
 </table>
 
 <script>
+// ratio between begin and end hr
+// if begin hr = 80, end hr = 50
+// gain is 1.6x
+function calculateGain(data) {
+  return (data.begin.hr / data.end.hr);
+}
+
+function calculateGains(sessions) {
+  return sessions.map(function(session) {
+    return calculateGain(session);
+  })
+}
+
+function calculatePercentile(sample, data) {
+  var without = _.without(data, sample);
+  if(without.length == 0) {
+    return 50;
+  }
+  var sorted = without.sort();
+  var sortedIndex = _.sortedIndex(sorted, sample);
+  var percentile = sortedIndex / sorted.length;
+  return parseInt(percentile * 100);
+}
+
+function getOverallPercentile(sessionData, sessions) {
+  var overall = calculatePercentile(
+    calculateGain(sessionData),
+    calculateGains(sessions)
+  );
+  // add some jitter to ranking
+  overall += _.random(-3, +3);
+  overall = Math.max(overall, 1);
+  overall = Math.min(overall, 99);
+  return overall;
+}
+
 function getStats(data, sessions) {
   var closestSession = {};
   var closestTiming;
@@ -47,24 +85,22 @@ function getStats(data, sessions) {
     }
   })
 
-  var session = closestSession;
+  var sessionData = closestSession;
 
-  console.log('best session is:');
-  console.log(session);
+  sessionData.begin.hr = Math.floor(sessionData.begin.hr);
+  sessionData.begin.spo2 = Math.floor(sessionData.begin.spo2);
+  sessionData.end.hr = Math.floor(sessionData.end.hr);
+  sessionData.end.spo2 = Math.floor(sessionData.end.spo2);
 
-  // sessionData.begin.hr = Math.floor(sessionData.begin.hr);
-  // sessionData.begin.spo2 = Math.floor(sessionData.begin.spo2);
-  // sessionData.end.hr = Math.floor(sessionData.end.hr);
-  // sessionData.end.spo2 = Math.floor(sessionData.end.spo2);
-
-  // // assume that sessions always go well
-  // sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
+  // assume that sessions always go well
+  sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
 
   return {
-    spo2: session.end.spo2,
-    overall: 90,
-    begin: session.begin.hr,
-    end: session.end.hr
+    spo2: sessionData.end.spo2,
+    overall: getOverallPercentile(sessionData, sessions),
+    begin: sessionData.begin.hr,
+    end: sessionData.end.hr,
+    sessionData: sessionData
   }
 }
 
@@ -89,7 +125,13 @@ function addRow(data, sessions) {
         '<td>' +
           '<p><a href="' + data.path + '"><img title="' + data.file + '" src="' + data.path + '"></a></p>' +
           '<p>' + statsString + '</p>' +
-          '<p class="timeago" title="' + data.time + '">' + data.time + '</p>' +
+          '<p>Photo from <span class="timeago" title="' + data.time + '">' + data.time + '</span></p>' +
+          '<p>Session began <span class="timeago" title="' + 
+            stats.sessionData.begin.time + '">' + 
+            stats.sessionData.begin.time + '</span></p>' +
+          '<p>And ended <span class="timeago" title="' + 
+            stats.sessionData.end.time + '">' +
+            stats.sessionData.end.time + '</span></p>' +
           '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" href="' + printUrl + '">Print</a>' +
         '</td>'
       '</tr>';
