@@ -20,6 +20,13 @@ p {
 img {
   max-width: 400px;
 }
+a {
+  color: inherit;
+  font-size: 10px;
+}
+span {
+  font-weight: bold;
+}
 </style>
 </head>
 
@@ -74,11 +81,13 @@ function getOverallPercentile(sessionData, sessions) {
   return overall;
 }
 
-function getStats(data, sessions) {
+function getStats(data, sessions, matchedSessions) {
   var closestSession = {};
   var closestTiming;
-  sessions.forEach(function(session) {
-    var timing = Math.abs(new Date(session.end.time) - new Date(data.time));
+  matchedSessions.forEach(function(session) {
+    var avg = (new Date(session.begin.time).getTime() +
+      new Date(session.end.time).getTime()) / 2;
+    var timing = Math.abs(avg - new Date(data.time));
     if(!closestTiming || timing < closestTiming) {
       closestTiming = timing;
       closestSession = session;
@@ -100,13 +109,14 @@ function getStats(data, sessions) {
     overall: getOverallPercentile(sessionData, sessions),
     begin: sessionData.begin.hr,
     end: sessionData.end.hr,
-    sessionData: sessionData
+    sessionData: sessionData,
+    timeOffset: closestTiming
   }
 }
 
-function addRow(data, sessions) {
+function addRow(data, sessions, matchedSessions) {
   var manual = data.file.match(/manual/);
-  var stats = getStats(data, sessions);
+  var stats = getStats(data, sessions, matchedSessions);
   var printUrl = './print?'+
     '&cameraId=' + config.cameraId +
     '&screenshot=' + data.file +
@@ -123,15 +133,16 @@ function addRow(data, sessions) {
     .innerHTML +=
       '<tr>' +
         '<td>' +
-          '<p><a href="' + data.path + '"><img title="' + data.file + '" src="' + data.path + '"></a></p>' +
+          '<a href="' + data.path + '">' +
+          '<p><img title="' + data.file + '" src="' + data.path + '"></p>' +
+          '<p class="path" style="text-align: right">' + data.path + '</p>' +
+          '</a>' + 
           '<p>' + statsString + '</p>' +
-          '<p>Photo from <span class="timeago" title="' + data.time + '">' + data.time + '</span></p>' +
-          '<p>Session began <span class="timeago" title="' + 
-            stats.sessionData.begin.time + '">' + 
+          '<p>Photo taken <span class="timeago" title="' + data.time + '">' + data.time + '</span></p>' +
+          '<p>Session started <span class="timeago" title="' +
+            stats.sessionData.begin.time + '">' +
             stats.sessionData.begin.time + '</span></p>' +
-          '<p>And ended <span class="timeago" title="' + 
-            stats.sessionData.end.time + '">' +
-            stats.sessionData.end.time + '</span></p>' +
+          '<p>Photo taken within <span>' + moment.duration(stats.timeOffset).humanize() + '</span> of session</p>' +
           '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" href="' + printUrl + '">Print</a>' +
         '</td>'
       '</tr>';
@@ -141,11 +152,19 @@ $(function() {
   console.log('loading');
   var cameraId = config.cameraId;
   $.getJSON(config.remote + '/get/sessions', function(sessions) {
+    var matchedSessions = sessions.filter(function(session) {
+      return session.begin.serial == config.curSerial;
+    })
     $.getJSON('/screenshot/list', { cameraId: cameraId }, function(screenshots) {
       console.log(sessions);
+      if(Arg('manual')) {
+        screenshots = screenshots.filter(function(screenshot) {
+          return screenshot.file.match(/manual/);
+        })
+      }
       screenshots.forEach(function(datum) {
         datum.path = 'screenshots/' + config.cameraId + '/' + datum.file;
-        addRow(datum, sessions);
+        addRow(datum, sessions, matchedSessions);
       });
       $('.timeago').timeago();
     });

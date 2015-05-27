@@ -520,6 +520,13 @@ $(function() {
 		  .style('visibility', 'visible')
 		  .style('opacity', 1);
 	})
+
+  var resetTimeoutId = 0;
+  $('#graph').mousedown(function() {
+      resetTimeoutId = setTimeout(resetState, 1000);
+  }).bind('mouseup mouseleave', function() {
+      clearTimeout(resetTimeoutId);
+  });
 })
 
 $(document).on('mousemove touchmove', function(event) {
