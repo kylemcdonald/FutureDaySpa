@@ -395,6 +395,7 @@ function updateHrData(data) {
     } else {
       console.log('using this data as sessionData.begin');
       sessionData.begin = data;
+      clearScreenshot();
     }
   }
 
@@ -438,13 +439,16 @@ function updateHrData(data) {
   })
 }
 
-function resetState() {
-  sessionData = {};
+function clearScreenshot() {
   $.get('/screenshot/clear',
     { cameraId: config.cameraId },
     function(data) {
       console.log('cleared screenshot: ' + data);
     })
+}
+
+function resetState() {
+  sessionData = {};
   updateHrVisuals();
 }
 
@@ -523,7 +527,10 @@ $(function() {
 
   var resetTimeoutId = 0;
   $('#graph').mousedown(function() {
-      resetTimeoutId = setTimeout(resetState, 1000);
+      resetTimeoutId = setTimeout(function() {
+        resetState();
+        clearScreenshot();
+      }, 1000);
   }).bind('mouseup mouseleave', function() {
       clearTimeout(resetTimeoutId);
   });

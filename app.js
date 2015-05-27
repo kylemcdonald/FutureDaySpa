@@ -80,7 +80,6 @@ function getClosestScreenshot(cameraId, date) {
 function getScreenshot(cameraId) {
 	if(manualPhotos[cameraId]) {
 		var screenshot = manualPhotos[cameraId];
-		manualPhotos[cameraId] = null;
 		console.log('using manual screenshot');
 		return screenshot;
 	} else {
