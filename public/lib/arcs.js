@@ -72,7 +72,7 @@ function createDial(svg) {
   var dial = {
     setPercent: function(percent, duration) {
       duration = duration || 1000;
-      if(arcPath.datum().endAngle == rot(0)) {
+      if(config.render) {
         duration = 0;
       }
       setAngle(arc, arcPath, circle, tau * percent, duration);

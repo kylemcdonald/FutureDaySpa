@@ -328,6 +328,7 @@ function setRange(begin, end) {
       .ease('linear')
   } else {
     // fade everything out
+    console.log('fading everything out');
     d3.select('#axes-area')
       .transition()
       .style('opacity', 0)
@@ -369,6 +370,9 @@ function updateHrVisuals() {
     end = config.render.end;
   }
 
+  if(begin) begin = parseInt(begin);
+  if(end) end = parseInt(end);
+
   // set the dials at the bottom right
   dialOverall.setPercent(overall / 100);
   $('#overall-number').text(formatPercentage(overall));
@@ -408,22 +412,22 @@ function updateHrData(data) {
     }, function (data) {
       // only load session data if it isn't already there
       // this happens when running phantomjs or refreshing
-      if(!sessionData.begin) {
+      if(!sessionData.begin && !sessionData.end) {
         console.log('using sessionData.begin from database');
         sessionData.begin = data[0];
-      }
-      if(!sessionData.end) {
         console.log('using sessionData.end from database');
         sessionData.end = data[1];
       }
 
-      sessionData.begin.hr = Math.floor(sessionData.begin.hr);
-      sessionData.begin.spo2 = Math.floor(sessionData.begin.spo2);
-      sessionData.end.hr = Math.floor(sessionData.end.hr);
-      sessionData.end.spo2 = Math.floor(sessionData.end.spo2);
+      if(sessionData.begin && sessionData.end) {
+        sessionData.begin.hr = Math.floor(sessionData.begin.hr);
+        sessionData.begin.spo2 = Math.floor(sessionData.begin.spo2);
+        sessionData.end.hr = Math.floor(sessionData.end.hr);
+        sessionData.end.spo2 = Math.floor(sessionData.end.spo2);
 
-      // assume that sessions always go well
-      sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
+        // assume that sessions always go well
+        sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
+      }
 
       console.log('updated sessionData:');
       console.log(sessionData);

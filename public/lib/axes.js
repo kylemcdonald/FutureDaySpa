@@ -17,6 +17,7 @@ axes.append('g')
 
 var axesInitialized = false;
 function zoomToRange(left, right, padding, duration) {
+  console.log('zoomToRange(' + [left, right, padding, duration].join(', ') + ')');
   var range = right - left;
   left -= range * padding;
   right += range * padding;
