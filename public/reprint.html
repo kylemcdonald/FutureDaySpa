@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Future Day Spa</title>
+<link rel="stylesheet" href="style/pure.css">
+<script src="lib/jquery.min.js"></script>
+<script src="lib/arg-1.3.1.min.js"></script>
+<script src="lib/jquery.timeago.min.js"></script>
+<script src="config.js"></script>
+<style>
+body, html {
+  width: 100%;
+  background: black;
+  color: white;
+}
+p {
+  margin: .4em;
+}
+img {
+  max-width: 400px;
+}
+</style>
+</head>
+
+<body>
+
+<h1 style="text-align: center">Future Day Spa</h1>
+<table class="pure-table" style="margin: auto">
+    <thead>
+        <tr>
+            <th>Images</th>
+        </tr>
+    </thead>
+
+    <tbody id="rows">
+    </tbody>
+</table>
+
+<script>
+function create(tag) {
+  return document.createElement(tag);
+}
+function addRow(data) {
+  console.log(data);
+  var manual = data.file.match(/manual/);
+  var printUrl = './client.html?'+
+    '&screenshot=' + config.cameraId + '/' + data.file;
+  document
+    .getElementById('rows')
+    .innerHTML +=
+      '<tr>' +
+        '<td>' +
+          '<p><a href="' + data.path + '"><img title="' + data.file + '" src="' + data.path + '"></a></p>' +
+          '<p class="timeago" title="' + data.time + '">' + data.time + '</p>' +
+          '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" href="' + printUrl + '">Print</a>' +
+        '</td>'
+      '</tr>';
+}
+$(function() {
+  console.log('loading');
+  var cameraId = config.cameraId;
+  $.getJSON('/screenshot/list', {
+    cameraId: cameraId
+  }, function(data) {
+    data.forEach(function(datum) {
+      datum.path = 'screenshots/' + config.cameraId + '/' + datum.file;
+      addRow(datum);
+    });
+    $('.timeago')
+    .timeago();
+  });
+})
+</script>
+
+</body>
+</html>

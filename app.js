@@ -150,7 +150,7 @@ app.get('/print', function(req, res) {
 	console.log('/print');
 	console.log(req.query);
 	var cameraId = req.query.cameraId;
-	var screenshot = getScreenshot(cameraId);
+	var screenshot = req.query.screenshot || getScreenshot(cameraId);
 	var dir = 'public/prints/' + cameraId + '/';
 	var filename = dir + (new Date()) + '.png';
 	mkdirp(dir, function (err) {
