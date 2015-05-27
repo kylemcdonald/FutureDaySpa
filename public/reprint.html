@@ -36,38 +36,79 @@ img {
 </table>
 
 <script>
-function create(tag) {
-  return document.createElement(tag);
+function getStats(data, sessions) {
+  var closestSession = {};
+  var closestTiming;
+  sessions.forEach(function(session) {
+    var timing = Math.abs(new Date(session.end.time) - new Date(data.time));
+    if(!closestTiming || timing < closestTiming) {
+      closestTiming = timing;
+      closestSession = session;
+    }
+  })
+
+  var session = closestSession;
+
+  console.log('best session is:');
+  console.log(session);
+
+  // sessionData.begin.hr = Math.floor(sessionData.begin.hr);
+  // sessionData.begin.spo2 = Math.floor(sessionData.begin.spo2);
+  // sessionData.end.hr = Math.floor(sessionData.end.hr);
+  // sessionData.end.spo2 = Math.floor(sessionData.end.spo2);
+
+  // // assume that sessions always go well
+  // sessionData.end.hr = Math.min(sessionData.begin.hr, sessionData.end.hr);
+
+  return {
+    spo2: session.end.spo2,
+    overall: 90,
+    begin: session.begin.hr,
+    end: session.end.hr
+  }
 }
-function addRow(data) {
-  console.log(data);
+
+function addRow(data, sessions) {
   var manual = data.file.match(/manual/);
-  var printUrl = './client.html?'+
-    '&screenshot=' + config.cameraId + '/' + data.file;
+  var stats = getStats(data, sessions);
+  var printUrl = './print?'+
+    '&cameraId=' + config.cameraId +
+    '&screenshot=' + data.file +
+    '&spo2=' + stats.spo2 +
+    '&overall=' + stats.overall +
+    '&begin=' + stats.begin +
+    '&end=' + stats.end;
+  var statsString = stats.spo2 + '% SpO2 ' +
+    stats.overall + '% overall / from ' +
+    stats.end + 'bpm to ' +
+    stats.begin + 'bpm';
   document
     .getElementById('rows')
     .innerHTML +=
       '<tr>' +
         '<td>' +
           '<p><a href="' + data.path + '"><img title="' + data.file + '" src="' + data.path + '"></a></p>' +
+          '<p>' + statsString + '</p>' +
           '<p class="timeago" title="' + data.time + '">' + data.time + '</p>' +
           '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" href="' + printUrl + '">Print</a>' +
         '</td>'
       '</tr>';
 }
+
 $(function() {
   console.log('loading');
   var cameraId = config.cameraId;
-  $.getJSON('/screenshot/list', {
-    cameraId: cameraId
-  }, function(data) {
-    data.forEach(function(datum) {
-      datum.path = 'screenshots/' + config.cameraId + '/' + datum.file;
-      addRow(datum);
+  $.getJSON(config.remote + '/get/sessions', function(sessions) {
+    $.getJSON('/screenshot/list', { cameraId: cameraId }, function(screenshots) {
+      console.log(sessions);
+      screenshots.forEach(function(datum) {
+        datum.path = 'screenshots/' + config.cameraId + '/' + datum.file;
+        addRow(datum, sessions);
+      });
+      $('.timeago').timeago();
     });
-    $('.timeago')
-    .timeago();
   });
+
 })
 </script>
 

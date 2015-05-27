@@ -399,8 +399,8 @@ function updateHrData(data) {
   }
 
   console.log('updating records from database...');
-  var url = config.remote + '/get/data';
   $('#records-link').attr('href', url);
+  var url = config.remote + '/get/data';
   $.getJSON(url, {
       serial: config.curSerial,
       limit: 2
