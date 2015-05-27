@@ -59,7 +59,7 @@ function getClosestScreenshot(cameraId, date) {
 	var files = fs.readdirSync(dir);
 	if(!files) return null;
 	files = files.filter(function(file) {
-		if(file.match(/\.jpg$/i)) return file;
+		return file.match(/\.jpg$/i);
 	})
 	if(!files) return null;
 	var bestDiff = 0;
@@ -111,6 +111,29 @@ app.get('/screenshot/recent', function(req, res) {
 	var file = getClosestScreenshot(cameraId, new Date());
 	var path = dir + '/' + file;
 	res.sendfile(path);
+})
+
+app.get('/screenshot/list', function(req, res) {
+	var cameraId = req.query.cameraId;
+	var dir = 'public/screenshots/' + cameraId;
+	var json = [];
+	var files = fs.readdirSync(dir)
+	.filter(function(file) {
+		return file.match(/\.jpg$/i);
+	})
+	.map(function(file) {
+		var path = dir + '/' + file;
+		var stats = fs.statSync(path);
+		var time = new Date(stats.mtime);
+		return {
+			file: file,
+			time: time
+		}
+	})
+	.sort(function(a, b) {
+		return b.time - a.time;
+	})
+	res.json(files);
 })
 
 function sh(cmd) {
