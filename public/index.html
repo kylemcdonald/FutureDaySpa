@@ -8,6 +8,7 @@ body, html {
   width: 100%;
   background: black;
   color: white;
+  text-align: center;
 }
 p {
   margin: .4em;
@@ -19,43 +20,38 @@ p {
 
 <h1 style="text-align: center">Future Day Spa</h1>
 <div class="pure-g">
-  <div class="pure-u-1-4" style="text-align: right">
+  <div class="pure-u-1-5">
     <p>Computer</p>
     <p><a href="server.html?cameraId=0" class="pure-button">Server 0</a></p>
     <p><a href="server.html?cameraId=1" class="pure-button">Server 1</a></p>
     <p><a href="server.html?cameraId=2" class="pure-button">Server 2</a></p>
   </div>
-  <div class="pure-u-1-4" style="text-align: left">
+  <div class="pure-u-1-5">
     <p>Tablets</p>
     <p><a href="client.html?cameraId=0" class="pure-button">Client 0</a></p>
     <p><a href="client.html?cameraId=1" class="pure-button">Client 1</a></p>
     <p><a href="client.html?cameraId=2" class="pure-button">Client 2</a></p>
   </div>
-  <div class="pure-u-1-4" style="text-align: right">
+  <div class="pure-u-1-5">
     <p>Reprint All</p>
     <p><a href="reprint.html?cameraId=0" class="pure-button">Reprint 0</a></p>
     <p><a href="reprint.html?cameraId=1" class="pure-button">Reprint 1</a></p>
     <p><a href="reprint.html?cameraId=2" class="pure-button">Reprint 2</a></p>
   </div>
-  <div class="pure-u-1-4" style="text-align: left">
+  <div class="pure-u-1-5">
     <p>Reprint Manual</p>
     <p><a href="reprint.html?cameraId=0&manual=true" class="pure-button">Reprint 0</a></p>
     <p><a href="reprint.html?cameraId=1&manual=true" class="pure-button">Reprint 1</a></p>
     <p><a href="reprint.html?cameraId=2&manual=true" class="pure-button">Reprint 2</a></p>
   </div>
-</div>
-
-<div class="pure-g">
-    <div class="pure-u-1-2"  style="text-align: right">
+  <div class="pure-u-1-5 pure-form">
       <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/sessions" class="pure-button">View Sessions</a></p>
       <p><a href="http://qualcomm-lucymcrae.herokuapp.com/get/data" class="pure-button">View Data</a></p>
-    </div>
-    <div class="pure-u-1-2 pure-form">
-        <p><input type="text" placeholder="SpO2" id="spo2-value"></p>
-        <p><input type="text" placeholder="Heart Rate" id="hr-value"></p>
-        <p><input type="text" placeholder="Serial" id="serial-value"></p>
-        <p><a href="#" class="pure-button pure-button-success" id="add-reading">Add Reading</a></p>
-    </div>
+      <p><input type="text" placeholder="Heart Rate" id="hr-value"></p>
+      <p><input type="text" placeholder="SpO2" id="spo2-value"></p>
+      <p><input type="text" placeholder="Serial" id="serial-value"></p>
+      <p><a href="#" class="pure-button pure-button-success" id="add-reading">Add Reading</a></p>
+  </div>
 </div>
 
 <script>

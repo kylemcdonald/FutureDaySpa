@@ -27,6 +27,11 @@ a {
 span {
   font-weight: bold;
 }
+input, .pure-button {
+  margin: .3em;
+  width: 3em;
+  text-align: center;
+}
 </style>
 </head>
 
@@ -114,20 +119,33 @@ function getStats(data, sessions, matchedSessions) {
   }
 }
 
+function print(data) {
+  $.get('./print', {
+    cameraId: config.cameraId,
+    screenshot: data.file,
+    begin: $('#'+data.id+' #session-begin-value').val(),
+    end: $('#'+data.id+' #session-end-value').val(),
+    spo2: $('#'+data.id+' #session-spo2-value').val(),
+    overall: $('#'+data.id+' #session-overall-value').val(),    
+  })
+}
+
 function addRow(data, sessions, matchedSessions) {
   var manual = data.file.match(/manual/);
   var stats = getStats(data, sessions, matchedSessions);
-  var printUrl = './print?'+
-    '&cameraId=' + config.cameraId +
-    '&screenshot=' + data.file +
-    '&spo2=' + stats.spo2 +
-    '&overall=' + stats.overall +
-    '&begin=' + stats.begin +
-    '&end=' + stats.end;
   var statsString = stats.spo2 + '% SpO2 ' +
     stats.overall + '% overall / from ' +
     stats.end + 'bpm to ' +
     stats.begin + 'bpm';
+  var id = new Date(data.time).getTime();
+  data.id = id;
+  var override =
+    '<div class="pure-form" id="' + id + '">'+
+    '<input type="text" value="' + stats.begin + '" id="session-begin-value"> Begin ' +
+    '<input type="text" value="' + stats.end + '" id="session-end-value"> End ' +
+    '<input type="text" value="' + stats.spo2 + '" id="session-spo2-value"> SpO2 ' +
+    '<input type="text" value="' + stats.overall + '" id="session-overall-value">Overall' +
+    '</div>';
   document
     .getElementById('rows')
     .innerHTML +=
@@ -137,14 +155,15 @@ function addRow(data, sessions, matchedSessions) {
           '<p><img title="' + data.file + '" src="' + data.path + '"></p>' +
           '<p class="path" style="text-align: right">' + data.path + '</p>' +
           '</a>' + 
-          '<p>' + statsString + '</p>' +
+          // '<p>' + statsString + '</p>' +
           '<p>Photo taken <span class="timeago" title="' + data.time + '">' + data.time + '</span></p>' +
-          '<p>Session started <span class="timeago" title="' +
+          '<p>Closest session started <span class="timeago" title="' +
             stats.sessionData.begin.time + '">' +
             stats.sessionData.begin.time + '</span></p>' +
           '<p>Photo taken within <span>' + moment.duration(stats.timeOffset).humanize() + '</span> of session</p>' +
-          '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" href="' + printUrl + '">Print</a>' +
-        '</td>'
+          override +
+          '<a class="pure-button ' + (manual ? ' pure-button-success' : '') + '" onclick=\'print(' + JSON.stringify(data) + ')\'>Print</a>' +
+          '</td>'
       '</tr>';
 }
 
