@@ -10,7 +10,12 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-server.listen(process.env.PORT || 8000);
+var port = process.env.PORT || 8000;
+server.listen(port, function () {
+	var host = server.address().address;
+	var port = server.address().port;
+	console.log('Listening at http://%s:%s', host, port);
+});
 
 app.use(bodyParser.raw({ type: 'image/jpeg', limit: '10mb'}));
 app.use(express.static(__dirname + '/public'));
@@ -175,7 +180,7 @@ app.get('/print', function(req, res) {
 				height: Math.round(baseSize[1] * zoomFactor)
 			}
 		};
-		var url = 'http://localhost:8000/client.html?' +
+		var url = 'http://localhost:' + port + '/client.html?' +
 			'&render=true' +
 			'&screenshot=' + cameraId + '/' + screenshot +
 			'&overall=' + req.query.overall +
